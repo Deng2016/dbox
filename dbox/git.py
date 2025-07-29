@@ -7,7 +7,6 @@ import os
 import re
 import time
 import logging
-from typing import Union, Optional
 from pathlib import Path
 from . import utils, message, file
 
@@ -16,7 +15,7 @@ logger = logging.getLogger("DBoxUtils")
 
 
 def check_branch_exist(
-    repo_path: Union[str, Path], branch: str, remote: str = ""
+    repo_path: str | Path, branch: str, remote: str = ""
 ) -> bool:
     """检查指定分支是否存在"""
     repo_path = Path(repo_path)
@@ -49,7 +48,7 @@ def check_branch_exist(
             return True
 
 
-def get_current_branch(repo_path: Union[str, Path]) -> tuple:
+def get_current_branch(repo_path: str | Path) -> tuple:
     """获取当前分支"""
     repo_path = Path(repo_path)
     file.check_path_is_exits(repo_path, path_type="dir")
@@ -129,7 +128,7 @@ def push_local_update(
 
 
 def init_repo(
-    repo_path: Union[str, Path], repo_url: str, lfs: bool = False, pattern=None
+    repo_path: str | Path, repo_url: str, lfs: bool = False, pattern=None
 ) -> bool:
     """初始化本地库"""
     repo_path = Path(repo_path)
@@ -201,14 +200,14 @@ def is_equal(branch1: str, branch2: str):
 
 
 def pull_repo(
-    repo_path: Union[str, Path],
+    repo_path: str | Path,
     repo_url: str,
     branch: str,
     branch_type: str = "branch",
     remote: str = "origin",
     lfs: bool = False,
-    pattern: Optional[str] = None,
-    no_exist_create_modle: Optional[str] = None,
+    pattern: str | None = None,
+    no_exist_create_modle: str | None = None,
     consistency_check: bool = True,
     read_only: bool = False,
     default_branch: str = "master",
@@ -338,7 +337,7 @@ def pull_repo(
 
 
 def merge_to_branch(
-    repo_path: Union[str, Path], repo_url: str, target_branch: str, source_branch: str
+    repo_path: str | Path, repo_url: str, target_branch: str, source_branch: str
 ) -> str:
     """将源分支代码合并进目标分支
     :param repo_path: 仓库绝对路径
@@ -400,7 +399,7 @@ def parser_git_url(repo_url: str) -> tuple:
         return None, None
 
 
-def get_repo_info(repo_path: Union[str, Path], remote="origin"):
+def get_repo_info(repo_path: str | Path, remote="origin"):
     """获取指定git库信息"""
     repo_path = Path(repo_path)
 
@@ -425,7 +424,7 @@ def get_repo_info(repo_path: Union[str, Path], remote="origin"):
 
 
 def create_branch_by_tag(
-    repo_path: Union[str, Path], tag_name: str, branch_name: str, push: bool = True
+    repo_path: str | Path, tag_name: str, branch_name: str, push: bool = True
 ) -> bool:
     """根据tag/branch/commit创建新分支
     :param repo_path: git库本地绝对路径
@@ -465,7 +464,7 @@ def create_branch_by_tag(
 
 
 def delete_branch(
-    repo_path: Union[str, Path], branch_name: str, remote: str = "origin"
+    repo_path: str | Path, branch_name: str, remote: str = "origin"
 ) -> bool:
     """删除分支
     :param repo_path: git库本地绝对路径

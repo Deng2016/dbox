@@ -9,7 +9,7 @@ import logging
 import inspect
 import datetime
 import subprocess
-from typing import Sequence, Dict
+from collections.abc import Sequence
 from pathlib import Path
 from decimal import Decimal
 from functools import wraps
@@ -128,7 +128,7 @@ def my_json_serializable(o):
 
     try:
         return str(o)
-    except Exception:
+    except (TypeError, ValueError):
         raise TypeError(
             f"Object of type {o.__class__.__name__} " f"is not JSON serializable"
         )
@@ -188,20 +188,23 @@ def to_boolean(flag, default=False):
 
 def get_digit_from_input(params=None):
     """从键盘获取一个数字，并做规范性检查
-    :param params: Union[List, Tuple],如果给出则输入的数字必须在params内。
+    :param params: list | tuple, 如果给出则输入的数字必须在params内。
     """
     while True:
-        num_str = eval(input("请输入一个有效数字："))
-        if num_str.isdigit():
-            num_int = int(num_str)
-            if isinstance(params, (tuple, list)) and len(params) > 0:
-                if num_int in params:
-                    break
+        try:
+            num_str = input("请输入一个有效数字：")
+            if num_str.isdigit():
+                num_int = int(num_str)
+                if isinstance(params, (tuple, list)) and params:
+                    if num_int in params:
+                        break
+                    else:
+                        print("输入的不是一个有效选项！")
                 else:
-                    print("输入的不是一个有效选项！")
+                    break
             else:
-                break
-        else:
+                print("输入的不是一个数字！")
+        except (ValueError, TypeError):
             print("输入的不是一个数字！")
     return num_int
 
@@ -275,7 +278,7 @@ def extract_func_elapsed(elapsed_collector, parent=None, node=None):
     return _stat_func_elapsed1
 
 
-def get_caller_info(depth: int) -> Dict[str, str]:
+def get_caller_info(depth: int) -> dict[str, str]:
     """获取调用方名称与描述
     :param depth: int, 函数调用栈递归深度，当前方法为0，依次往上递增
     """

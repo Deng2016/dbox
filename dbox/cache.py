@@ -9,7 +9,6 @@ import os
 import sys
 import json
 from pathlib import Path
-from typing import Union
 from threading import Lock
 from redis import Redis, ConnectionPool
 
@@ -69,7 +68,7 @@ def get_redis_handler(db_index=0):
             return redis_obj
         else:
             return None
-    except Exception:
+    except (ConnectionError, TimeoutError):
         return None
 
 
@@ -83,7 +82,7 @@ def batch_delete_key(db_index: int, name_expression: str):
         logger.warning("Redis connection failed, cannot delete keys")
         return
     temp_lock_list = redis.keys(name_expression)
-    if len(temp_lock_list) > 0:
+    if temp_lock_list:
         redis.delete(*temp_lock_list)
 
 
@@ -93,7 +92,7 @@ class MyRedis(Redis):
 
     def batch_delete(self, name_expression):
         key_list = self.keys(name_expression)
-        if len(key_list) > 0:
+        if key_list:
             self.delete(*key_list)
 
     def get_to_json(self, name):
@@ -169,13 +168,13 @@ class MyRedis(Redis):
             return _l
 
 
-class MyCache(object):
+class MyCache:
     """自定义缓存类，redis不可用时替代使用"""
 
-    def __init__(self, cache_path: Union[Path, str]):
+    def __init__(self, cache_path: Path):
         self._dict = dict()
         self._lock = Lock()
-        self.cache_path = Path(cache_path)
+        self.cache_path = cache_path
         if self.cache_path.exists():
             cache = read_file_content(self.cache_path, encoding="utf-8", _return="json")
             if isinstance(cache, dict):

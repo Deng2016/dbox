@@ -2,7 +2,6 @@ import time
 import math
 import pytz
 import datetime
-from typing import Union
 
 
 def get_timestamp(length: int = 10, utc=False) -> int:
@@ -35,7 +34,7 @@ def get_current_time(
 
 def str_to_time(
     time_str: str, _format="long"
-) -> Union[datetime.datetime, datetime.date]:
+) -> datetime.datetime | datetime.date:
     if not time_str:
         raise ValueError(f"time_str参数非法：{time_str}")
 

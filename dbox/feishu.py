@@ -37,7 +37,7 @@ def send_text_alert_message(message: str, receiver: dict, app_name: str = ""):
     """
     try:
         sign, timestamp = get_sign(receiver["secret"])
-        url = url_model.format(receiver["id"])
+        url = f"{url_model}{receiver['id']}"
         if app_name:
             message += f"。消息来源：{app_name}"
         payload = {
@@ -68,7 +68,7 @@ def send_post_message(title: str, content_list: list, receiver: dict, app_name: 
     """发送富文本消息"""
     try:
         sign, timestamp = get_sign(receiver["secret"])
-        url = url_model.format(receiver["id"])
+        url = f"{url_model}{receiver['id']}"
         if app_name:
             title += f"({app_name})"
         payload = {

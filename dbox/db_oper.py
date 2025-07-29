@@ -9,7 +9,6 @@
 """
 import logging
 from copy import deepcopy
-from typing import Dict, List, Tuple, Union, Optional
 
 import pymysql
 from pymysql.connections import Connection
@@ -26,7 +25,7 @@ def get_connection(
     port: int,
     username: str,
     password: str,
-    database: Optional[str] = None,
+    database: str | None = None,
     charset="utf8mb4",
 ) -> Connection:
     """获取数据库连接"""
@@ -48,9 +47,9 @@ def db_data_stat(
     port: int,
     username: str,
     password: str,
-    database: Optional[str] = None,
-    ignore_databases: Optional[list] = None,
-) -> Dict[str, Dict[str, int]]:
+    database: str | None = None,
+    ignore_databases: list | None = None,
+) -> dict[str, dict[str, int]]:
     """Database 数据量统计"""
     db_info = dict()
     if ignore_databases is None:
@@ -150,7 +149,7 @@ def get_tables(cursor: DictCursor, database: str) -> set:
     return set(row[f"Tables_in_{database}"] for row in cursor.fetchall())
 
 
-def compare_columns(table: str, columns1: Union[List, Tuple], columns2: Union[List, Tuple]):
+def compare_columns(table: str, columns1: list, columns2: list):
     """比较两个表的字段，以columns1为基准，比较columns2中缺失的字段，以及字段的差异"""
     column_names1 = [column["Field"] for column in columns1]
     column_names2 = [column["Field"] for column in columns2]
@@ -178,7 +177,7 @@ def compare_columns(table: str, columns1: Union[List, Tuple], columns2: Union[Li
             logger.info(f"Table: {table} 字段: {column_name} 的定义一致")
 
 
-def compare_indexes(table: str, indexes1: Union[List, Tuple], indexes2: Union[List, Tuple]):
+def compare_indexes(table: str, indexes1: list, indexes2: list):
     """比较两个表的索引，以indexes1为基准，比较indexes2中缺失的索引，以及索引的差异"""
     index_names1 = [index["Key_name"] for index in indexes1]
     index_names2 = [index["Key_name"] for index in indexes2]

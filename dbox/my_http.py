@@ -1,7 +1,6 @@
 import os
 import json
 import requests
-from typing import Optional
 from urllib.parse import urlparse, unquote
 from requests.cookies import RequestsCookieJar
 from requests.structures import CaseInsensitiveDict
@@ -25,7 +24,7 @@ def check_response(
     operate="",
     ignore_error=True,
     echo=False,
-    caller_info: Optional[dict] = None,
+    caller_info: dict | None = None,
     disable_echo: bool = False,
 ) -> bool:
     """检查response是否成功
@@ -78,7 +77,7 @@ def check_response(
             raise ValueError(response.text)
 
 
-def format_output(obj, level="debug", depth=2, caller_info: Optional[dict] = None):
+def format_output(obj, level="debug", depth=2, caller_info: dict | None = None):
     def __output_response(__obj: requests.Response):
         _logger(f"请求地址：{__obj.request.method}, {__obj.request.url}")
         _logger(
@@ -220,7 +219,7 @@ def query_str_to_dict(_str: str) -> dict:
                 key, values = item.split("=")
             except ValueError as e:
                 logger.warning("拆包时出现异常，可能是字符串中存在多个【=】导致，启用备用方案拆包：忽略第2个及以后的【=】字符")
-                logger.warning("原始字符串：{}".format(item))
+                logger.warning(f"原始字符串：{item}")
                 key, values = item.split("=", 1)
             payload[key] = values
     return payload

@@ -1,9 +1,9 @@
+import os
 import re
 import socket
 import logging
 import requests
 import mimetypes
-from typing import Union, Tuple
 from pathlib import Path
 from contextlib import closing
 from urllib.parse import urlparse
@@ -112,7 +112,7 @@ def download_file(url: str, file_save_path: Path):
         raise FileNotFoundError(f"下载失败：{url}")
 
 
-def download_and_check_md5(url: str, target: Union[str, Path], md5: str = ""):
+def download_and_check_md5(url: str, target: Path, md5: str = ""):
     """下载文件"""
     target = Path(target) if not isinstance(target, Path) else target
 
@@ -173,11 +173,11 @@ def find_available_port(_ip: str, _start_port: int, _end_port: int) -> int:
 
 
 def convert_network_traffic(
-    bytes_val: Union[int, float],
+    bytes_val: int | float,
     in_type: str = "byte",
     target_unit: str = "auto",
     decimal: int = 2,
-) -> Tuple[float, str]:
+) -> tuple[float, str]:
     """将字节单位的流量转换为更大的单位，注意是byte不是bit
     :param bytes_val: 字节单位的流量
     :param in_type: 输入的流量单位，可选值有["byte", "bit"]
@@ -218,7 +218,7 @@ def convert_network_traffic(
     return float(formatted_val), target_unit
 
 
-def get_file_content_type(file_path: Union[str, Path]) -> str:
+def get_file_content_type(file_path: str | Path) -> str:
     """获取文件的MIME类型"""
     mime_type, _ = mimetypes.guess_type(file_path)
     return mime_type or ""

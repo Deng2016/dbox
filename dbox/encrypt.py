@@ -7,7 +7,6 @@ from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP as oaep_cipher
 
-from typing import Optional
 from .file import check_path_is_exits
 
 
@@ -31,7 +30,7 @@ def sum_md5(param_str: str) -> str:
     return _hash.hexdigest()
 
 
-def md5sum(*, _file_path: Optional[str] = None, _string: Optional[str] = None):
+def md5sum(*, _file_path: str | None = None, _string: str | None = None) -> str:
     """计算文件md5值"""
     if _file_path:
         check_path_is_exits(_file_path, path_type="file")
@@ -89,7 +88,7 @@ def jwt_decode(
     )
 
 
-class MyCrypto(object):
+class MyCrypto:
     """RSA加密算法特性：
     1. 公钥加密，私钥解密；
     2. 公钥相同，明文相同，但每次加密后得到的密文不同；

@@ -11,13 +11,12 @@ import filecmp
 import datetime
 import configparser
 from pathlib import Path
-from typing import Union, Optional
 
 
 logger = logging.getLogger("DBoxUtils")
 
 
-def check_path_is_exits(src_path: Union[str, Path], path_type=None):
+def check_path_is_exits(src_path: str | Path, path_type=None):
     """检查目录或文件是否存在
     :param src_path: 源路径
     :param path_type: 源路径类型，可选值：file/dir
@@ -41,7 +40,7 @@ def check_path_is_exits(src_path: Union[str, Path], path_type=None):
 
 
 def ensure_empty_dir(
-    target: Union[str, Path], mkdir=True, parents=True, *args, **kwargs
+    target: str | Path, mkdir=True, parents=True, *args, **kwargs
 ) -> None:
     """确保目录为空目录
     :param target: 目标目录路径
@@ -104,7 +103,7 @@ def compress_zip(src_path: str, compress_abs_path: str) -> None:
             compress_file.write(src_path, filename)
 
 
-def extract_zip(src_zip: Union[str, Path], dst_dir: Union[str, Path]) -> None:
+def extract_zip(src_zip: str | Path, dst_dir: str | Path) -> None:
     """解压zip文件
     :param src_zip: str or Path, 需要解压的zip文件绝对路径
     :param dst_dir: str or Path, 解压后存储的目标目录
@@ -164,7 +163,7 @@ def uncompress_tgz(compress_file, target_path="."):
     tar.close()
 
 
-def rm(src_path: Union[str, Path], *args, **kwargs):
+def rm(src_path: str | Path, *args, **kwargs):
     """删除文件或目录
     :param src_path: str, 源文件或目录路径
     """
@@ -193,7 +192,7 @@ def rm(src_path: Union[str, Path], *args, **kwargs):
     logger.info(f"删除成功：{src_path}")
 
 
-def rm_safe(src_path: Union[str, Path]):
+def rm_safe(src_path: str | Path):
     """安全删除"""
     rm(src_path=src_path, ignore_error=True)
 
@@ -208,7 +207,7 @@ def rm_readonly(fn, tmp, info):
 
 
 def move_to_dir(
-    src_path: Union[str, Path], dst_path: Union[str, Path], *args, **kwargs
+    src_path: str | Path, dst_path: str | Path, *args, **kwargs
 ):
     """移动文件
     :param src_path: str or Path, 源文件或目录路径
@@ -224,7 +223,7 @@ def move_to_dir(
 
 
 def copy_to_target(
-    src_path: Union[str, Path], dst_path: Union[str, Path], *args, **kwargs
+    src_path: str | Path, dst_path: str | Path, *args, **kwargs
 ):
     """复制文件或目标到目标路径
     :param src_path: str, 源文件或目录路径，不支持正则表达式；
@@ -255,10 +254,10 @@ def copy_to_target(
 
 
 def copy_to_target_by_pattern(
-    src_path: Union[str, Path],
-    dst_path: Union[str, Path],
+    src_path: str | Path,
+    dst_path: str | Path,
     recursion: bool = True,
-    excludes: Union[str, list] = "",
+    excludes: str | list = "",
 ):
     """通过表达式复制文件或目标到目标路径
     :param src_path: str, 源文件或目录路径，支持正则表达式；
@@ -320,7 +319,7 @@ def read_file_stream(file_path: str, start_index, end_index):
         return _file.read(end_index - start_index)
 
 
-def read_file_raw_content(file_path: Union[str, Path], encoding=None) -> tuple:
+def read_file_raw_content(file_path: str | Path, encoding=None) -> tuple:
     """读取文件内容
     :param file_path: 文件路径
     :param encoding: 文件字符编码，没有指定时会按照utf-8，GBK，GB2312，GB18030依次读取
@@ -349,7 +348,7 @@ def read_file_raw_content(file_path: Union[str, Path], encoding=None) -> tuple:
 
 
 def read_file_content(
-    file_path: Union[Path, str], encoding=None, _return=None, default=None
+    file_path: str | Path, encoding=None, _return=None, default=None
 ):
     """读取文件内容
     :param file_path: 文件路径
@@ -391,8 +390,8 @@ def save_obj_to_file(obj, file_abs_path: str, exist_ok=True, encoding="utf-8"):
 
 
 def save_json_to_file(
-    content: Union[dict, list, tuple],
-    file_abs_path: Union[Path, str],
+    content: dict | list | tuple,
+    file_abs_path: Path | str,
     exist_ok=True,
     encoding="utf-8",
     ensure_ascii=False,
@@ -422,7 +421,7 @@ def save_json_to_file(
         )
 
 
-def get_newest_file(target: str, _type: str = "c") -> Optional[str]:
+def get_newest_file(target: str, _type: str = "c") -> str | None:
     """获取目录下最新的文件
     :param target: str，目标目录；
     :param _type: str，类型，c按创建时间，m按修改时间，a按访问时间
@@ -438,7 +437,7 @@ def get_newest_file(target: str, _type: str = "c") -> Optional[str]:
         return target + os.sep + file_list[-1]
 
 
-def get_file_time(file_path: Union[Path, str], _type: str = "c", _return=None):
+def get_file_time(file_path: str | Path, _type: str = "c", _return=None):
     """根据文件修改日期获取插件版本号"""
     file_path = Path(file_path)
     if _type.lower() not in ("c", "m", "a"):

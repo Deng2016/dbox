@@ -2,13 +2,14 @@ import os
 import re
 import json
 import time
+import logging
 from pathlib import Path
-from typing import Union, List, Optional
+from datetime import datetime, timedelta
 
 from . import logger, file as file_utils
 
 
-def get_engine_version_info(deputy_abs_path: Union[str, Path]) -> dict:
+def get_engine_version_info(deputy_abs_path: Path) -> dict:
     """获取引擎版本信息"""
     file_utils.check_path_is_exits(deputy_abs_path, path_type="file")
     version_path = Path(deputy_abs_path).parent / "version.txt"
@@ -43,10 +44,8 @@ def get_engine_version_info(deputy_abs_path: Union[str, Path]) -> dict:
     return version_info
 
 
-def get_flow_info(flow_path: Union[Path, str]):
+def get_flow_info(flow_path: Path):
     """从流程flow文件中读取流程信息"""
-    if isinstance(flow_path, str):
-        flow_path = Path(flow_path)
     if flow_path.is_dir():
         flow_file_abs_path = flow_path / "main.prj"
         if not flow_file_abs_path.exists():
@@ -59,7 +58,7 @@ def get_flow_info(flow_path: Union[Path, str]):
     return flow_config
 
 
-def update_flow_info(flow_path: Union[str, Path], flow_info: dict):
+def update_flow_info(flow_path: Path, flow_info: dict):
     """更新流程flow文件信息"""
     file_utils.check_path_is_exits(flow_path)
     flow_path = Path(flow_path)
@@ -221,12 +220,12 @@ def get_file_list_by_suffix(
     suffix: str,
     reverse: bool = True,
     depth=2,
-    flow_version: Optional[str] = None,
-    flow_name: Optional[str] = None,
-    ignore_path: Optional[Path] = None,
-    only_author: Optional[str] = None,
-    ignore_author: Optional[str] = None,
-) -> List[Path]:
+    flow_version: str | None = None,
+    flow_name: str | None = None,
+    ignore_path: Path | None = None,
+    only_author: str | None = None,
+    ignore_author: str | None = None,
+) -> list[Path]:
     """获取目标文件夹下的特定扩展文件列表"""
     file_list = []
     # 兼容带.与不带.
@@ -314,7 +313,7 @@ def is_version_no(version: str):
         return False
 
 
-def get_flow_name(flow_file_abs_path: Union[str, Path]) -> str:
+def get_flow_name(flow_file_abs_path: Path) -> str:
     """获取流程名称"""
     _flow_name = None
     file_utils.check_path_is_exits(flow_file_abs_path, path_type="file")

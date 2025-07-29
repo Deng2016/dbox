@@ -1,7 +1,6 @@
 import sys
 import logging
 import logging.handlers
-from typing import List, Union, Optional
 from pathlib import Path
 
 
@@ -16,7 +15,7 @@ logger = logging.getLogger("DBoxUtils")
 logger.setLevel(logging.DEBUG)
 
 # 防止多次加载时产生重复的StreamHandler handler
-if len(logger.handlers) == 0:
+if not logger.handlers:
     console_handler = logging.StreamHandler(stream=sys.stdout)
     console_handler.setFormatter(log_format)
     console_handler.setLevel(logging.INFO)
@@ -105,17 +104,17 @@ def clean_handler(close_console_handler: bool = False):
 
 
 def configure_logger(
-    level: Optional[int] = None,
-    handlers: Optional[List[logging.Handler]] = None,
-    log_file: Optional[Union[Path, str]] = None,
+    level: int | None = None,
+    handlers: list | None = None,
+    log_file: Path | str | None = None,
     append: bool = True,
-    caller_info: Optional[dict] = None,
+    caller_info: dict | None = None,
     unify_level: bool = False,
-    fmt: Optional[logging.Formatter] = None,
+    fmt: logging.Formatter | None = None,
 ):
     """配置日志处理器
     :param level: int, 指定日志级别
-    :param handlers: List[Handler], 日志处理器列表
+    :param handlers: 日志处理器列表
     :param log_file: 日志文件存储路径
     :param append: 是否为追加模式。当为覆盖模式时会清空已有的handler再添加新的
     :param caller_info: 调用源信息
@@ -233,3 +232,6 @@ def configure_logger(
 
 
 logger.info(f"当前dbox库版本号：{__version__}")
+
+if sys.version_info < (3, 13):
+    logger.warning("\033[91m[警告] 当前 Python 版本为 {}.{}，本项目仅保证 3.13 及以上版本兼容，低版本可能存在不兼容问题。\033[0m".format(sys.version_info.major, sys.version_info.minor))

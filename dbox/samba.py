@@ -10,7 +10,6 @@ import json
 import time
 import logging
 from pathlib import Path
-from typing import Union
 from smb.SMBConnection import SMBConnection
 from smb.smb_structs import OperationFailure
 
@@ -136,7 +135,7 @@ def create_directory(
     return last_result
 
 
-def upload_file(conn: SMBConnection, service_name: str, path: str, file_path: Union[str, Path]):
+def upload_file(conn: SMBConnection, service_name: str, path: str, file_path: Path):
     logger.info(f"推送文件：{file_path} => {path}")
     # 防止多个终端同时推送同一个文件到同一地址导致的冲突
     # 重试30次，都失败时抛错
@@ -156,7 +155,7 @@ def upload_file(conn: SMBConnection, service_name: str, path: str, file_path: Un
                 break
 
 
-def download_file(conn: SMBConnection, service_name: str, path: str, file_path: Union[str, Path]):
+def download_file(conn: SMBConnection, service_name: str, path: str, file_path: Path):
     with open(file_path, mode="wb") as _file:
         file_size = conn.retrieveFile(service_name, path, _file)
     logger.info(f"文件下载完成：大小{file_size}, {service_name}{path} => {file_path}")
