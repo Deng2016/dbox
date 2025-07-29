@@ -80,9 +80,7 @@ def check_response(
 def format_output(obj, level="debug", depth=2, caller_info: dict | None = None):
     def __output_response(__obj: requests.Response):
         _logger(f"请求地址：{__obj.request.method}, {__obj.request.url}")
-        _logger(
-            f"请求头部：{json.dumps(dict(__obj.request.headers), ensure_ascii=False, indent=4, cls=MyJSONEncoder)}"
-        )
+        _logger(f"请求头部：{json.dumps(dict(__obj.request.headers), ensure_ascii=False, indent=4, cls=MyJSONEncoder)}")
         if __obj.request.body:
             if "application/json" in __obj.request.headers.get("Content-Type", ""):
                 if isinstance(__obj.request.body, bytes):
@@ -218,7 +216,9 @@ def query_str_to_dict(_str: str) -> dict:
             try:
                 key, values = item.split("=")
             except ValueError as e:
-                logger.warning("拆包时出现异常，可能是字符串中存在多个【=】导致，启用备用方案拆包：忽略第2个及以后的【=】字符")
+                logger.warning(
+                    "拆包时出现异常，可能是字符串中存在多个【=】导致，启用备用方案拆包：忽略第2个及以后的【=】字符"
+                )
                 logger.warning(f"原始字符串：{item}")
                 key, values = item.split("=", 1)
             payload[key] = values

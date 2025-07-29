@@ -1,4 +1,5 @@
 """发送企业微信通知"""
+
 # coding = utf-8
 import logging
 import requests

@@ -4,6 +4,7 @@
 2.创建目录；
 3.上传文件；
 """
+
 # coding = utf-8
 import os
 import json
@@ -63,7 +64,10 @@ def get_server_handler(
         raise ValueError(error_msg)
 
     conn = SMBConnection(
-        username=username, password=password, my_name=my_name, remote_name=remote_name,
+        username=username,
+        password=password,
+        my_name=my_name,
+        remote_name=remote_name,
     )
     conn.connect(ip=ip_address)
     global IP_ADDRESS, USERNAME, PASSWORD
@@ -102,7 +106,10 @@ def get_server2_handler(
         raise ValueError(error_msg)
 
     conn = SMBConnection(
-        username=username, password=password, my_name=my_name, remote_name=remote_name,
+        username=username,
+        password=password,
+        my_name=my_name,
+        remote_name=remote_name,
     )
     conn.connect(ip=ip_address)
     global IP_ADDRESS, USERNAME, PASSWORD
@@ -112,9 +119,7 @@ def get_server2_handler(
     return conn
 
 
-def create_directory(
-    conn: SMBConnection, service_name: str, path: str, is_exist_ok=True
-) -> bool:
+def create_directory(conn: SMBConnection, service_name: str, path: str, is_exist_ok=True) -> bool:
     """创建目录，支持递归创建"""
     last_result = True
     dir_list = list(Path(path).parents)
@@ -203,9 +208,7 @@ def push_file_to_samba(file_path: Path, target_dir: str):
     # 上传新包
     upload_file(conn, service_name, f"{target_dir}/{file_name}", file_path)
     # 仓库完整路径
-    package_repo_abs_path = (
-        f"/{IP_ADDRESS}/{service_name}{target_dir}/{file_name}"
-    )
+    package_repo_abs_path = f"/{IP_ADDRESS}/{service_name}{target_dir}/{file_name}"
     logger.info(f"备份成功：{file_path.stem}=>{package_repo_abs_path}")
 
 

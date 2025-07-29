@@ -133,10 +133,7 @@ class MyRedis(Redis):
     def hgetall(self, name):
         _v = super(MyRedis, self).hgetall(name)
         if isinstance(_v, dict):
-            return {
-                _k.decode("utf-8"): _v.decode("utf-8")
-                for _k, _v in _v.items()
-            }
+            return {_k.decode("utf-8"): _v.decode("utf-8") for _k, _v in _v.items()}
         else:
             return _v
 
@@ -147,7 +144,7 @@ class MyRedis(Redis):
         else:
             return _k
 
-    def keys(self, pattern='*', **kwargs):
+    def keys(self, pattern="*", **kwargs):
         _l = super(MyRedis, self).keys(pattern, **kwargs)
         if _l:
             return [_i.decode("utf-8") for _i in _l]

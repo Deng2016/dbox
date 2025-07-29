@@ -62,29 +62,13 @@ def get_system_info(win_rm_session=None) -> dict:
                 system_info = bytes_to_str(res.stdout)
         for line in system_info.split("\n"):
             line = line.strip()
-            if (
-                line.startswith("主机名:")
-                or line.startswith("主機名稱:")
-                or line.startswith("Host Name:")
-            ):
+            if line.startswith("主机名:") or line.startswith("主機名稱:") or line.startswith("Host Name:"):
                 systems["host_name"] = line.split(":")[-1].strip()
-            elif (
-                line.startswith("OS 名称:")
-                or line.startswith("作業系統名稱:")
-                or line.startswith("OS Name:")
-            ):
+            elif line.startswith("OS 名称:") or line.startswith("作業系統名稱:") or line.startswith("OS Name:"):
                 systems["os_name"] = line.split(":")[-1].strip()
-            elif (
-                line.startswith("OS 版本:")
-                or line.startswith("作業系統版本:")
-                or line.startswith("OS Version:")
-            ):
+            elif line.startswith("OS 版本:") or line.startswith("作業系統版本:") or line.startswith("OS Version:"):
                 systems["os_version"] = line.split(":")[-1].strip()
-            elif (
-                line.startswith("系统类型:")
-                or line.startswith("系統類型:")
-                or line.startswith("System Type:")
-            ):
+            elif line.startswith("系统类型:") or line.startswith("系統類型:") or line.startswith("System Type:"):
                 systems["os_arch"] = line.split(":")[-1].strip()
         try:
             from . import net as net_utils
@@ -126,17 +110,9 @@ def get_mac_address(ip_address: str, win_rm_session=None) -> str:
         for _line in network_info.split("\n"):
             _line = _line.strip()
             if _line:
-                if (
-                    _line.startswith("Physical Address")
-                    or _line.startswith("物理地址")
-                    or _line.startswith("實體位址")
-                ):
+                if _line.startswith("Physical Address") or _line.startswith("物理地址") or _line.startswith("實體位址"):
                     mac_address = _line.split(":")[-1].strip()
-                elif (
-                    _line.startswith("IPv4 Address")
-                    or _line.startswith("IPv4 地址")
-                    or _line.startswith("IPv4 位址")
-                ):
+                elif _line.startswith("IPv4 Address") or _line.startswith("IPv4 地址") or _line.startswith("IPv4 位址"):
                     if ip_address in _line:
                         return mac_address
             else:

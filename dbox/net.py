@@ -67,9 +67,7 @@ def is_valid_ip(ip):
         return False
 
     try:
-        res = socket.getaddrinfo(
-            ip, 0, socket.AF_UNSPEC, socket.SOCK_STREAM, 0, socket.AI_NUMERICHOST
-        )
+        res = socket.getaddrinfo(ip, 0, socket.AF_UNSPEC, socket.SOCK_STREAM, 0, socket.AI_NUMERICHOST)
         return bool(res)
     except socket.gaierror as e:
         if e.args[0] == socket.EAI_NONAME:
@@ -202,9 +200,7 @@ def convert_network_traffic(
 
     else:
         if target_unit not in units:
-            raise ValueError(
-                f"不支持的目标单位: {target_unit}，请规范输入，支持的单位有：{units}"
-            )
+            raise ValueError(f"不支持的目标单位: {target_unit}，请规范输入，支持的单位有：{units}")
 
         for i, unit in enumerate(units):
             if unit == target_unit:

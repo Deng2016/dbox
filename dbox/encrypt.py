@@ -173,12 +173,7 @@ class MyCrypto:
     @staticmethod
     def rsa_decrypt(key, data):
         """RSA非对称解密，用于通过用户名与密码创建新用户时"""
-        pri_key = (
-            "-----BEGIN RSA PRIVATE KEY-----\n"
-            + key
-            + "\n"
-            + "-----END RSA PRIVATE KEY-----"
-        )
+        pri_key = "-----BEGIN RSA PRIVATE KEY-----\n" + key + "\n" + "-----END RSA PRIVATE KEY-----"
         pri_key = RSA.import_key(pri_key)
         cipher = oaep_cipher.new(pri_key, hashAlgo=SHA256)
         rsa_text = cipher.decrypt(base64.b64decode(data))

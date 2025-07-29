@@ -17,9 +17,9 @@ from .bankinfo import bank_bin_list
 
 
 def get_random_data(
-    start_date: datetime.date | datetime.datetime | str = "", 
-    end_date: datetime.date | datetime.datetime | str = "", 
-    _format: str = "%Y-%m-%d"
+    start_date: datetime.date | datetime.datetime | str = "",
+    end_date: datetime.date | datetime.datetime | str = "",
+    _format: str = "%Y-%m-%d",
 ) -> str:
     """
     随机生成日期
@@ -36,13 +36,13 @@ def get_random_data(
         end_date = datetime.datetime.now().date()
     elif isinstance(end_date, str):
         end_date = datetime.datetime.strptime(end_date, _format)
-    
+
     # 统一转换为 datetime 对象以便计算
     if isinstance(start_date, datetime.date):
         start_date = datetime.datetime.combine(start_date, datetime.time.min)
     if isinstance(end_date, datetime.date):
         end_date = datetime.datetime.combine(end_date, datetime.time.max)
-    
+
     diff_days = (end_date - start_date).days + 1
     random_days = random.randint(0, diff_days - 1)
     random_date = start_date + datetime.timedelta(days=random_days)
@@ -120,9 +120,7 @@ def get_name(gender=""):
         经房裘缪，干解应宗。
         丁宣贲邓，郁单杭洪。"""
 
-    firstnames = (
-        firstnames.replace("，", "").replace("。", "").replace("\n", "").replace(" ", "")
-    )
+    firstnames = firstnames.replace("，", "").replace("。", "").replace("\n", "").replace(" ", "")
     firstname = random.choice(firstnames)
 
     secondname_boy = """
@@ -160,12 +158,8 @@ def get_name(gender=""):
     元柏、代萱、紫真、千青、雪珍、寄琴、绿蕊、醉柳、诗翠、念瑶、孤风、曼彤、怀曼、香巧、采蓝、芷天、尔曼、巧蕊"""
 
     # 随机获取男名与女名
-    grid_name = random.choice(
-        secondname_grid.replace("\n", "").replace(" ", "").split("、")
-    )
-    boy_name = random.choice(
-        secondname_boy.replace("\n", "").replace(" ", "").split("、")
-    )
+    grid_name = random.choice(secondname_grid.replace("\n", "").replace(" ", "").split("、"))
+    boy_name = random.choice(secondname_boy.replace("\n", "").replace(" ", "").split("、"))
 
     # 将两个字的名字随机转换成双字或单字
     if random.randint(1, 3) == 1:
@@ -260,9 +254,7 @@ def get_idcards(sex=0):
         sex_code = random.randrange(2, 10, 2)
 
     # part5: 计算校验码
-    check_code = check_idcards(
-        f"{area_code}{birthdate}{sequence_code}{sex_code}"
-    )
+    check_code = check_idcards(f"{area_code}{birthdate}{sequence_code}{sex_code}")
 
     return f"{area_code}{birthdate}{sequence_code}{sex_code}{check_code}"
 
@@ -301,9 +293,7 @@ def get_mobile_no():
         188,
         189,
     ]
-    phone_no = str(random.choice(phone_head)) + "".join(
-        random.choices("0123456789", k=8)
-    )
+    phone_no = str(random.choice(phone_head)) + "".join(random.choices("0123456789", k=8))
     return phone_no
 
 
@@ -328,9 +318,7 @@ def get_bank_no(num=1, bank=None, bank_name=None, ftype=None, length=None, first
         raise ValueError("银联卡号通常是16到19数字，请检查输入的length参数")
 
     # 获取参数获取bin码
-    bin_list = get_bank_bin(
-        num=num, bank=bank, bank_name=bank_name, ftype=ftype, length=length
-    )
+    bin_list = get_bank_bin(num=num, bank=bank, bank_name=bank_name, ftype=ftype, length=length)
 
     for bin in bin_list:
         __get_bank_no(bin_obj=bin)

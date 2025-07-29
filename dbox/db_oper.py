@@ -162,9 +162,7 @@ def compare_columns(table: str, columns1: list, columns2: list):
 
     for column in columns1:
         column_name = column["Field"]
-        column2 = next(
-            (c for c in columns2 if c["Field"] == column_name), None
-        )
+        column2 = next((c for c in columns2 if c["Field"] == column_name), None)
         if column2 is None:
             continue
 
@@ -172,7 +170,9 @@ def compare_columns(table: str, columns1: list, columns2: list):
             # 字段定义不一致时，找出不一致的地方
             for key, value in column.items():
                 if column2[key] != value:
-                    logger.warning(f"表【{table}】中字段【{column_name}】的属性【{key}】不一致，标准库为【{value}】，比较库为【{column2[key]}】")
+                    logger.warning(
+                        f"表【{table}】中字段【{column_name}】的属性【{key}】不一致，标准库为【{value}】，比较库为【{column2[key]}】"
+                    )
         else:
             logger.info(f"Table: {table} 字段: {column_name} 的定义一致")
 
@@ -281,9 +281,7 @@ def compare_database(
                 db2_tables = get_tables(cursor1, db)
                 missing_tables = db1_tables - db2_tables
                 if missing_tables:
-                    logger.warning(
-                        f"URL: {host2}:{port2} Database2: {db} 中缺失的表：{missing_tables}"
-                    )
+                    logger.warning(f"URL: {host2}:{port2} Database2: {db} 中缺失的表：{missing_tables}")
                 else:
                     logger.info(f"URL: {host2}:{port2} Database2: {db} 中没有缺失表")
 

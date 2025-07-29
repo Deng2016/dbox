@@ -1,5 +1,7 @@
 """工具函数，与打包逻辑无直接关联"""
+
 import math
+
 # coding = utf-8
 import os
 import uuid
@@ -74,9 +76,7 @@ def execute_cmd(
         except IndexError as e:
             if run_count == 0:
                 logger.exception(e)
-                logger.warning(
-                    f"运行报错，当前capture_output={capture_output}，翻转capture_output参数，再次尝试运行……"
-                )
+                logger.warning(f"运行报错，当前capture_output={capture_output}，翻转capture_output参数，再次尝试运行……")
                 kwargs["capture_output"] = not kwargs["capture_output"]
             else:
                 error_msg = f"执行命令出错：{os.getcwd()} - {cmd_text}\n{str(e)}"
@@ -129,9 +129,7 @@ def my_json_serializable(o):
     try:
         return str(o)
     except (TypeError, ValueError):
-        raise TypeError(
-            f"Object of type {o.__class__.__name__} " f"is not JSON serializable"
-        )
+        raise TypeError(f"Object of type {o.__class__.__name__} " f"is not JSON serializable")
 
 
 class MyJSONEncoder(json.encoder.JSONEncoder):
@@ -269,9 +267,9 @@ def extract_func_elapsed(elapsed_collector, parent=None, node=None):
             finally:
                 elapsed = round(time.perf_counter() - start_time, 1)
                 logger.info(f"结束运行：{func_name}（{func_desc}），耗时：{elapsed}秒")
-                elapsed_collector.nodes[
-                    node_identifier
-                ].tag = f"{index_no} - 耗时【{elapsed}】：{func_name}（{func_desc}）"
+                elapsed_collector.nodes[node_identifier].tag = (
+                    f"{index_no} - 耗时【{elapsed}】：{func_name}（{func_desc}）"
+                )
 
         return _stat_func_elapsed2
 

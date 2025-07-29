@@ -16,8 +16,8 @@ setup(
     author="dqy",
     author_email="yu12377@163.com",
     packages=find_packages(),
-    long_description=open('README.md', encoding="utf-8").read(),
-    long_description_content_type='text/markdown',
+    long_description=open("README.md", encoding="utf-8").read(),
+    long_description_content_type="text/markdown",
     exclude_package_data={"": [".gitignore", "lab.py"]},
     install_requires=[
         "requests~=2.32.4",
@@ -27,11 +27,11 @@ setup(
         "pysmb~=1.2.11",
         "pyjwt~=2.10.1",
         "pytz~=2025.2",
-        ],
+    ],
     classifiers=[
-        'Programming Language :: Python',
-        'Programming Language :: Python :: Implementation',
-        'Programming Language :: Python :: 3.13',
-        'Topic :: Software Development :: Libraries'
-    ]
+        "Programming Language :: Python",
+        "Programming Language :: Python :: Implementation",
+        "Programming Language :: Python :: 3.13",
+        "Topic :: Software Development :: Libraries",
+    ],
 )

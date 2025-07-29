@@ -14,9 +14,7 @@ from . import utils, message, file
 logger = logging.getLogger("DBoxUtils")
 
 
-def check_branch_exist(
-    repo_path: str | Path, branch: str, remote: str = ""
-) -> bool:
+def check_branch_exist(repo_path: str | Path, branch: str, remote: str = "") -> bool:
     """检查指定分支是否存在"""
     repo_path = Path(repo_path)
 
@@ -25,9 +23,7 @@ def check_branch_exist(
 
     if remote:
         try:
-            utils.execute_cmd(
-                ["git", "fetch", remote, branch], level="debug", ignore_error_log=True
-            )
+            utils.execute_cmd(["git", "fetch", remote, branch], level="debug", ignore_error_log=True)
         except Exception as e:
             logger.debug(f"【{repo_path}】远程库中不存在【{branch}】分支")
             return False
@@ -37,9 +33,7 @@ def check_branch_exist(
     else:
         try:
             # 末尾添加--防止分支名与文件名称冲突
-            utils.execute_cmd(
-                ["git", "checkout", branch, "--"], level="debug", ignore_error_log=True
-            )
+            utils.execute_cmd(["git", "checkout", branch, "--"], level="debug", ignore_error_log=True)
         except Exception as e:
             logger.debug(f"【{repo_path}】本地库中不存在【{branch}】分支")
             return False
@@ -79,9 +73,7 @@ def get_current_branch(repo_path: str | Path) -> tuple:
         raise ValueError(f"获取{repo_path}git库当前分支信息失败")
 
 
-def push_local_update(
-    repo_path: Path, branch: str, commit_desc: str, receiver: str = ""
-) -> str:
+def push_local_update(repo_path: Path, branch: str, commit_desc: str, receiver: str = "") -> str:
     """push本地修改到远程分支"""
     doc = push_local_update.__doc__ or ""
     logger.info(doc + commit_desc)
@@ -105,11 +97,7 @@ def push_local_update(
 
         if _res is None:
             raise ValueError("Git status command failed")
-        if (
-            exist_update
-            or "Your branch is ahead of" in _res.stdout
-            or "您的分支领先" in _res.stdout
-        ):
+        if exist_update or "Your branch is ahead of" in _res.stdout or "您的分支领先" in _res.stdout:
             utils.execute_cmd(["git", "push", "origin", branch])
     except Exception as e:
         _msg = f"{repo_path}仓库push失败存在冲突，请手动处理！"
@@ -127,9 +115,7 @@ def push_local_update(
             return "noupdate"
 
 
-def init_repo(
-    repo_path: str | Path, repo_url: str, lfs: bool = False, pattern=None
-) -> bool:
+def init_repo(repo_path: str | Path, repo_url: str, lfs: bool = False, pattern=None) -> bool:
     """初始化本地库"""
     repo_path = Path(repo_path)
 
@@ -137,9 +123,7 @@ def init_repo(
         """开启稀疏签出"""
         os.chdir(_repo_path)
         logger.debug(f"更新【稀疏签出】，签出表达式：{_pattern}")
-        utils.execute_cmd(
-            ["git", "config", "core.sparsecheckout", "true"], level="debug"
-        )
+        utils.execute_cmd(["git", "config", "core.sparsecheckout", "true"], level="debug")
         _checkout_config = _repo_path / ".git" / "info" / "sparse-checkout"
         with open(str(_checkout_config), "w") as _f:
             _f.write(_pattern)
@@ -272,8 +256,8 @@ def pull_repo(
             raise ValueError("Git status command failed")
         # 工作目录干净，不需要处理
         if (
-                f"Your branch is up to date with '{remote}/{branch}'." in res.stdout
-                or f"您的分支与上游分支 '{remote}/{branch}' 一致。" in res.stdout
+            f"Your branch is up to date with '{remote}/{branch}'." in res.stdout
+            or f"您的分支与上游分支 '{remote}/{branch}' 一致。" in res.stdout
         ):
             logger.debug(f"仓库{repo_path}分支{branch}与上游{remote}/{branch}分支一致")
         else:
@@ -300,11 +284,7 @@ def pull_repo(
         # 先检查本地是否已经为预计目标，如果是则不用访问远程git服务，防止远程git服务不可用导致额外的报错
         # 只适用于commit类型，因为只有commit是不可变的，branch是可变的，tag可以删除后重新创建同名标签
         current_type, current_branch = get_current_branch(repo_path)
-        if (
-            branch_type == "commit"
-            and branch_type == current_type.lower()
-            and branch == current_branch
-        ):
+        if branch_type == "commit" and branch_type == current_type.lower() and branch == current_branch:
             logger.info(f"当前已经是预定目标，无需切换：{branch_type}:{branch}:{repo_path}")
         else:
             utils.execute_cmd(["git", "fetch", remote, default_branch], level="debug")
@@ -336,9 +316,7 @@ def pull_repo(
     logger.info(doc + f"，仓库：{repo_path}，分支：{branch}，耗时：{elapsed}秒")
 
 
-def merge_to_branch(
-    repo_path: str | Path, repo_url: str, target_branch: str, source_branch: str
-) -> str:
+def merge_to_branch(repo_path: str | Path, repo_url: str, target_branch: str, source_branch: str) -> str:
     """将源分支代码合并进目标分支
     :param repo_path: 仓库绝对路径
     :param repo_url: 操作库ssh地址
@@ -374,9 +352,7 @@ def merge_to_branch(
     else:
         # 推送代码
         utils.execute_cmd(["git", "push", "origin", target_branch])
-        logger.info(
-            f"分支合并到完成，仓库路径：{repo_path}，目标分支：{target_branch}，源分支：{source_branch}"
-        )
+        logger.info(f"分支合并到完成，仓库路径：{repo_path}，目标分支：{target_branch}，源分支：{source_branch}")
 
         # merge成功后检查冲突标志文件是否存在，存在则删除
         if conflict.exists():
@@ -423,9 +399,7 @@ def get_repo_info(repo_path: str | Path, remote="origin"):
         }
 
 
-def create_branch_by_tag(
-    repo_path: str | Path, tag_name: str, branch_name: str, push: bool = True
-) -> bool:
+def create_branch_by_tag(repo_path: str | Path, tag_name: str, branch_name: str, push: bool = True) -> bool:
     """根据tag/branch/commit创建新分支
     :param repo_path: git库本地绝对路径
     :param tag_name: 基于此对象创建新分支，可以是tag或branch或commit
@@ -463,9 +437,7 @@ def create_branch_by_tag(
     return True
 
 
-def delete_branch(
-    repo_path: str | Path, branch_name: str, remote: str = "origin"
-) -> bool:
+def delete_branch(repo_path: str | Path, branch_name: str, remote: str = "origin") -> bool:
     """删除分支
     :param repo_path: git库本地绝对路径
     :param branch_name: 新分支名称

@@ -133,7 +133,7 @@ def version_increment(version: str, step: int = 10) -> str:
     :return 下一版本号
     """
     # 将版本号字符串拆分为整数列表
-    version_parts = list(map(int, version.split('.')))
+    version_parts = list(map(int, version.split(".")))
     length = len(version_parts)
 
     # 从最后一位开始递增
@@ -151,7 +151,7 @@ def version_increment(version: str, step: int = 10) -> str:
         version_parts[0] += 1
 
     # 将版本号列表转换回字符串形式
-    return '.'.join(map(str, version_parts))
+    return ".".join(map(str, version_parts))
 
 
 def is_ignore(ignore_path: Path, flow_file_path: Path) -> bool:
@@ -325,9 +325,7 @@ def get_flow_name(flow_file_abs_path: Path) -> str:
     # 6.0.0及以后版本的流程
     elif flow_file_abs_path.suffix.lower() == ".prj":
         try:
-            info_json = file_utils.read_file_content(
-                flow_file_abs_path, encoding="utf-8", _return="json"
-            )
+            info_json = file_utils.read_file_content(flow_file_abs_path, encoding="utf-8", _return="json")
             _flow_name = info_json["name"]
         except:
             logger.error(f"流程文件解析失败：{flow_file_abs_path}")
@@ -335,9 +333,7 @@ def get_flow_name(flow_file_abs_path: Path) -> str:
     else:
         # Worker 中运行时bot包缓存目录
         config_path = flow_file_abs_path.parent / "config.json"
-        info_json = file_utils.read_file_content(
-            config_path, encoding="utf-8", _return="json"
-        )
+        info_json = file_utils.read_file_content(config_path, encoding="utf-8", _return="json")
         _flow_name = info_json["name"]
     return _flow_name
 

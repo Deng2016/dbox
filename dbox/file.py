@@ -39,9 +39,7 @@ def check_path_is_exits(src_path: str | Path, path_type=None):
             raise FileNotFoundError(f"{src_path}不是有效的目录！")
 
 
-def ensure_empty_dir(
-    target: str | Path, mkdir=True, parents=True, *args, **kwargs
-) -> None:
+def ensure_empty_dir(target: str | Path, mkdir=True, parents=True, *args, **kwargs) -> None:
     """确保目录为空目录
     :param target: 目标目录路径
     :param mkdir: bool, 目标目录不存在时自动创建
@@ -95,9 +93,7 @@ def compress_zip(src_path: str, compress_abs_path: str) -> None:
                 relative_path = abs_dir_path.replace(src_path, "")
                 relative_path = (relative_path and relative_path + os.sep) or ""
                 for filename in file_list:
-                    compress_file.write(
-                        os.path.join(abs_dir_path, filename), relative_path + filename
-                    )
+                    compress_file.write(os.path.join(abs_dir_path, filename), relative_path + filename)
         else:
             filename = os.path.basename(src_path)
             compress_file.write(src_path, filename)
@@ -206,9 +202,7 @@ def rm_readonly(fn, tmp, info):
         shutil.rmtree(tmp)
 
 
-def move_to_dir(
-    src_path: str | Path, dst_path: str | Path, *args, **kwargs
-):
+def move_to_dir(src_path: str | Path, dst_path: str | Path, *args, **kwargs):
     """移动文件
     :param src_path: str or Path, 源文件或目录路径
     :param dst_path: str or Path, 目标文件或目录路径
@@ -222,9 +216,7 @@ def move_to_dir(
     shutil.move(str(src_path), str(dst_path))
 
 
-def copy_to_target(
-    src_path: str | Path, dst_path: str | Path, *args, **kwargs
-):
+def copy_to_target(src_path: str | Path, dst_path: str | Path, *args, **kwargs):
     """复制文件或目标到目标路径
     :param src_path: str, 源文件或目录路径，不支持正则表达式；
     :param dst_path: str, 目标字符串路径；
@@ -244,9 +236,7 @@ def copy_to_target(
     if src_path.is_dir():
         if dst_path.exists():
             # 将目录复制到已经存在的目录下
-            shutil.copytree(
-                str(src_path), str(dst_path / src_path.name), dirs_exist_ok=True
-            )
+            shutil.copytree(str(src_path), str(dst_path / src_path.name), dirs_exist_ok=True)
         else:
             # 复制源目标生成指定的新目录
             shutil.copytree(str(src_path), str(dst_path), dirs_exist_ok=True)
@@ -347,9 +337,7 @@ def read_file_raw_content(file_path: str | Path, encoding=None) -> tuple:
             raise ValueError(f"无法读取文件：{file_path}")
 
 
-def read_file_content(
-    file_path: str | Path, encoding=None, _return=None, default=None
-):
+def read_file_content(file_path: str | Path, encoding=None, _return=None, default=None):
     """读取文件内容
     :param file_path: 文件路径
     :param encoding: 文件字符编码，没有指定时会按照utf-8，GBK，GB2312，GB18030依次读取
@@ -416,9 +404,7 @@ def save_json_to_file(
         file_abs_path.parent.mkdir(parents=True)
 
     with open(file_abs_path, mode="w", encoding=encoding) as _file:
-        return json.dump(
-            content, _file, ensure_ascii=ensure_ascii, indent=indent, cls=cls
-        )
+        return json.dump(content, _file, ensure_ascii=ensure_ascii, indent=indent, cls=cls)
 
 
 def get_newest_file(target: str, _type: str = "c") -> str | None:

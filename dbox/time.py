@@ -14,9 +14,7 @@ def get_timestamp(length: int = 10, utc=False) -> int:
     return int(str(current_timestamp * 1000)[:length])
 
 
-def get_current_time(
-    _format: str = "long", offset: int = 0, sep1="-", sep2=":", **kwargs
-) -> str:
+def get_current_time(_format: str = "long", offset: int = 0, sep1="-", sep2=":", **kwargs) -> str:
     if not isinstance(offset, int):
         raise ValueError(f"offset参数非法，预期为int类型，实际为{type(offset)}")
 
@@ -32,9 +30,7 @@ def get_current_time(
         return target_time.strftime(_format)
 
 
-def str_to_time(
-    time_str: str, _format="long"
-) -> datetime.datetime | datetime.date:
+def str_to_time(time_str: str, _format="long") -> datetime.datetime | datetime.date:
     if not time_str:
         raise ValueError(f"time_str参数非法：{time_str}")
 
@@ -52,9 +48,7 @@ def time_to_str(_time: datetime.datetime, _format="long") -> str:
         return _time.strftime("%Y-%m-%d")
 
 
-def timestamp_to_str(
-    timestamp: int, fmt="%Y-%m-%d %H:%M:%S", tz: str = "Asia/Shanghai"
-) -> str:
+def timestamp_to_str(timestamp: int, fmt="%Y-%m-%d %H:%M:%S", tz: str = "Asia/Shanghai") -> str:
     """时间戳转换时间字符串"""
     if len(str(timestamp)) == 13:
         time_int = math.floor(int(timestamp) / 1000)

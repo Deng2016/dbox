@@ -4,6 +4,7 @@
 2.创建tag;
 3.创建release;
 """
+
 # coding = utf-8
 import os
 import re
@@ -199,19 +200,13 @@ def get_commit_default(*, owner: str, repo: str, sha: str):
     return checkout_response(_res, level="debug")
 
 
-def release_exists(
-    *, owner: str, repo: str, name: str, tag_name: str, target: str
-) -> dict:
+def release_exists(*, owner: str, repo: str, name: str, tag_name: str, target: str) -> dict:
     """判断release是否已经存在"""
     _release_list = get_releases(owner=owner, repo=repo)
     if _release_list is None:
         return {}
     for _release in _release_list:
-        if (
-            _release["name"] == name
-            and _release["tag_name"] == tag_name
-            and _release["target_commitish"] == target
-        ):
+        if _release["name"] == name and _release["tag_name"] == tag_name and _release["target_commitish"] == target:
             logger.info(f"release已经存在：{owner}/{repo}:{name}")
             return _release
     logger.info(f"release不存在：{owner}/{repo}:{name}")
@@ -248,9 +243,7 @@ def create_release(*, owner: str, repo: str, payload: dict) -> dict:
 
     # 不存在时创建
     _url = f"{DOMAIN}/repos/{owner}/{repo}/releases"
-    logger.info(
-        f"【{owner}/{repo}】库发布版本，参数：{json.dumps(payload, ensure_ascii=False, indent=4)}"
-    )
+    logger.info(f"【{owner}/{repo}】库发布版本，参数：{json.dumps(payload, ensure_ascii=False, indent=4)}")
     _res = session.post(_url, params=auth_params, json=payload)
     result = checkout_response(_res, level="info")
     if result is None:
@@ -285,9 +278,7 @@ def delete_release(*, owner: str, repo: str, release_id: int):
     return checkout_response(_res, level="info")
 
 
-def get_pulls(
-    *, owner: str, repo: str, state: str, sort: str = "recentupdate", page=1, limit=50
-):
+def get_pulls(*, owner: str, repo: str, state: str, sort: str = "recentupdate", page=1, limit=50):
     """获取pull列表"""
     _url = f"{DOMAIN}/repos/{owner}/{repo}/pulls"
     if isinstance(page, int):
@@ -356,11 +347,7 @@ def merge_new(
     }
     _url = f"{DOMAIN}/repos/{owner}/{repo}/pulls"
     _res = session.post(_url, params=auth_params, json=payload)
-    if (
-        exist_ok
-        and _res.status_code == 409
-        and "pull request already exists for these targets" in _res.text
-    ):
+    if exist_ok and _res.status_code == 409 and "pull request already exists for these targets" in _res.text:
         logger.info("相应Merge Request 已经存在，无需再次创建，直接获取已经存在的内容")
         format_output(_res, "debug")
         _e = r"issue_id: (\d+?),"

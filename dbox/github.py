@@ -3,7 +3,7 @@
 """github api操作
 @author: dqy
 @file: github
-@time: 2023/12/7 15:34 
+@time: 2023/12/7 15:34
 """
 import os
 import re
@@ -45,18 +45,14 @@ def checkout_response(response: requests.Response, level="debug"):
             return response.json()
 
 
-def release_exists(
-    *, owner: str, repo: str, name: str, tag_name: str, target: str
-) -> dict:
+def release_exists(*, owner: str, repo: str, name: str, tag_name: str, target: str) -> dict:
     """判断release是否已经存在"""
     _release_list = get_releases(owner=owner, repo=repo)
     if _release_list is None:
         return {}
     for _release in _release_list:
         if isinstance(_release, dict) and (
-            _release["name"] == name
-            and _release["tag_name"] == tag_name
-            and _release["target_commitish"] == target
+            _release["name"] == name and _release["tag_name"] == tag_name and _release["target_commitish"] == target
         ):
             logger.info(f"release已经存在：{owner}/{repo}:{name}")
             return _release
@@ -94,9 +90,7 @@ def create_release(*, owner: str, repo: str, payload: dict) -> dict:
 
     # 不存在时创建
     _url = f"{DOMAIN}/repos/{owner}/{repo}/releases"
-    logger.info(
-        f"【{owner}/{repo}】库发布版本，参数：{json.dumps(payload, ensure_ascii=False, indent=4)}"
-    )
+    logger.info(f"【{owner}/{repo}】库发布版本，参数：{json.dumps(payload, ensure_ascii=False, indent=4)}")
     _res = session.post(_url, json=payload)
     result = checkout_response(_res, level="info")
     if result is None or not isinstance(result, dict):

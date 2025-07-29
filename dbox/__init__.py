@@ -5,9 +5,7 @@ from pathlib import Path
 
 
 __version__ = "2025.8.1.1"
-log_format = logging.Formatter(
-    "[%(asctime)s] %(name)s/%(filename)s/%(lineno)s/%(funcName)s/%(levelname)s: %(message)s"
-)
+log_format = logging.Formatter("[%(asctime)s] %(name)s/%(filename)s/%(lineno)s/%(funcName)s/%(levelname)s: %(message)s")
 
 # 日志句柄
 logger = logging.getLogger("DBoxUtils")
@@ -25,6 +23,7 @@ if not logger.handlers:
 def clean_repeat_handler():
     """清理重复的日志handler"""
     from dbox.utils import get_caller_info
+
     _info = get_caller_info(2)
     logger.debug(f"调用来源：{_info['output']}")
 
@@ -59,6 +58,7 @@ def clean_repeat_handler():
 def close_all_handler():
     """关闭所有日志handler"""
     from dbox.utils import get_caller_info
+
     _info = get_caller_info(2)
     logger.debug(f"调用来源：{_info['output']}")
 
@@ -71,6 +71,7 @@ def close_all_handler():
 def clean_handler(close_console_handler: bool = False):
     """清理日志handler，关闭所有FileHandler实例，StreamHandler实例只保留一个"""
     from dbox.utils import get_caller_info
+
     _info = get_caller_info(2)
     logger.debug(f"调用来源：{_info['output']}")
 
@@ -122,6 +123,7 @@ def configure_logger(
     :param fmt: 重置日志输出格式
     """
     from dbox.utils import get_caller_info
+
     _info = caller_info or get_caller_info(2)
     logger.debug(f"调用来源：{_info['output']}")
 
@@ -234,4 +236,8 @@ def configure_logger(
 logger.info(f"当前dbox库版本号：{__version__}")
 
 if sys.version_info < (3, 13):
-    logger.warning("\033[91m[警告] 当前 Python 版本为 {}.{}，本项目仅保证 3.13 及以上版本兼容，低版本可能存在不兼容问题。\033[0m".format(sys.version_info.major, sys.version_info.minor))
+    logger.warning(
+        "\033[91m[警告] 当前 Python 版本为 {}.{}，本项目仅保证 3.13 及以上版本兼容，低版本可能存在不兼容问题。\033[0m".format(
+            sys.version_info.major, sys.version_info.minor
+        )
+    )
