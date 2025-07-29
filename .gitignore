@@ -1,0 +1,15 @@
+.DS_Store
+.idea
+.iml
+*.log
+*.out
+*.pyc
+*.zip
+*.txt
+build
+sample/
+dbox.egg-info
+/dbox.egg-info/
+/sso_auth_client.egg-info/
+/dist/
+lab.py
