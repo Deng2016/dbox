@@ -35,6 +35,7 @@ setup(
             "README_TESTS.md",
         ]
     },
+    python_requires=">=3.13",
     install_requires=[
         "requests~=2.32.4",
         "redis~=6.2.0",
