@@ -10,11 +10,19 @@
 import logging
 from copy import deepcopy
 
-import pymysql
+try:
+    import pymysql
+except ImportError:
+    import os
+
+    os.system("python -m pip install pymysql")
+
+    import pymysql
+
 from pymysql.connections import Connection
 from pymysql.cursors import DictCursor
-from dbox import logger, configure_logger
-from dbox import my_http as http_utils
+from . import logger, configure_logger
+from . import my_http as http_utils
 
 
 configure_logger(level=logging.INFO)

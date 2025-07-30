@@ -81,9 +81,9 @@ def batch_delete_key(db_index: int, name_expression: str):
     if redis is None:
         logger.warning("Redis connection failed, cannot delete keys")
         return
-    temp_lock_list = redis.keys(name_expression)
+    temp_lock_list = redis.keys(name_expression)  # type: ignore
     if temp_lock_list:
-        redis.delete(*temp_lock_list)
+        redis.delete(*list(temp_lock_list))  # type: ignore
 
 
 class MyRedis(Redis):
@@ -91,16 +91,19 @@ class MyRedis(Redis):
         super().__init__(connection_pool=get_redis_pool(db_index))
 
     def batch_delete(self, name_expression):
-        key_list = self.keys(name_expression)
+        key_list = self.keys(name_expression)  # type: ignore
         if key_list:
-            self.delete(*key_list)
+            self.delete(*list(key_list))  # type: ignore
 
     def get_to_json(self, name):
         if name:
-            value_raw = self.get(name)
+            value_raw = self.get(name)  # type: ignore
             if value_raw:
                 try:
-                    user = json.loads(value_raw)
+                    if isinstance(value_raw, str):
+                        user = json.loads(value_raw)
+                    else:
+                        user = json.loads(value_raw.decode("utf-8"))  # type: ignore
                 except (TypeError, json.decoder.JSONDecodeError) as e:
                     self.delete(name)
                 else:
@@ -124,43 +127,51 @@ class MyRedis(Redis):
             return self.rpush(queue_name, value)
 
     def pop_obj(self, queue_name: str):
-        value = self.lpop(queue_name)
+        value = self.lpop(queue_name)  # type: ignore
         try:
-            return json.loads(value)
+            if value and isinstance(value, str):
+                return json.loads(value)
+            return value
         except Exception as e:
             return value
 
     def hgetall(self, name):
-        _v = super(MyRedis, self).hgetall(name)
+        _v = super(MyRedis, self).hgetall(name)  # type: ignore
         if isinstance(_v, dict):
-            return {_k.decode("utf-8"): _v.decode("utf-8") for _k, _v in _v.items()}
+            return {
+                _k.decode("utf-8") if isinstance(_k, bytes) else _k: _v.decode("utf-8") if isinstance(_v, bytes) else _v
+                for _k, _v in _v.items()
+            }
         else:
             return _v
 
     def lpop(self, name, count=None):
-        _k = super(MyRedis, self).lpop(name, count)
+        _k = super(MyRedis, self).lpop(name, count)  # type: ignore
         if _k:
-            return _k.decode("utf-8")
+            if isinstance(_k, bytes):
+                return _k.decode("utf-8")
+            return _k
         else:
             return _k
 
     def keys(self, pattern="*", **kwargs):
-        _l = super(MyRedis, self).keys(pattern, **kwargs)
+        _l = super(MyRedis, self).keys(pattern, **kwargs)  # type: ignore
         if _l:
-            return [_i.decode("utf-8") for _i in _l]
+            return [_i.decode("utf-8") if isinstance(_i, bytes) else _i for _i in _l]  # type: ignore
         else:
             return _l
 
     def get(self, name):
-        _v = super(MyRedis, self).get(name)
+        _v = super(MyRedis, self).get(name)  # type: ignore
         if _v:
-            _v = _v.decode("utf-8")
+            if isinstance(_v, bytes):
+                _v = _v.decode("utf-8")
         return _v
 
     def smembers(self, name):
-        _l = super(MyRedis, self).smembers(name)
+        _l = super(MyRedis, self).smembers(name)  # type: ignore
         if _l:
-            return set(_i.decode("utf-8") for _i in _l)
+            return set(_i.decode("utf-8") if isinstance(_i, bytes) else _i for _i in _l)  # type: ignore
         else:
             return _l
 
