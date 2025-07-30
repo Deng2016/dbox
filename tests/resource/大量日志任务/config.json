@@ -1,0 +1,69 @@
+{
+    "url": "http://192.168.10.164/view/commander/static/commander.html?ui_locales=zh-CN",
+    "selectFlow": 4531372949504001,
+    "version": "1.0.0",
+    "versionDesc": "",
+    "descContent": "<p><br></p>",
+    "name": "大量日志任务",
+    "pkgDestPath": "C:\\Users\\deng\\Documents\\UiBot\\creator\\Projects\\大量日志任务",
+    "guid": "39e6ecdb46e9b4",
+    "flow": "main.flowc",
+    "desc": "大量日志任务.html",
+    "res": "res",
+    "creatorVersion": "6.5.1",
+    "arch": "x86",
+    "platform": "win32",
+    "buildVersion": "2025.05.16.1014",
+    "productType": "enterprise",
+    "includeSourceCode": false,
+    "flowChat": [
+        {
+            "id": "start",
+            "rect": {
+                "x": 18,
+                "y": 0,
+                "width": 140,
+                "height": 50
+            },
+            "caption": "流程开始",
+            "type": "begin",
+            "next": {
+                "vertices": [],
+                "refId": "uibot39e6ecdb46fa08"
+            }
+        },
+        {
+            "id": "uibot39e6ecdb46fa08",
+            "rect": {
+                "x": -46,
+                "y": 200,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "流程块",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "流程块.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {},
+            "desc": "流程块"
+        }
+    ],
+    "parameters": [
+        {
+            "type": "in",
+            "name": "input",
+            "value": "30",
+            "category": "number"
+        }
+    ]
+}

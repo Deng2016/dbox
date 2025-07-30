@@ -8,7 +8,7 @@ def get_timestamp(length: int = 10, utc=False) -> int:
     """获取系统时间时间戳"""
     assert length in (10, 13), "时间戳长度参数错误，只有10位与13位时间戳"
     if utc:
-        current_timestamp = datetime.datetime.utcnow().timestamp()
+        current_timestamp = datetime.datetime.now(datetime.UTC).timestamp()
     else:
         current_timestamp = datetime.datetime.now().timestamp()
     return int(str(current_timestamp * 1000)[:length])

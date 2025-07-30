@@ -1,0 +1,674 @@
+{
+    "id": "38f02d1f7195d4",
+    "name": "浏览器",
+    "version": "6.0.0.211215",
+    "variables": [
+        {
+            "name": "blueprint_domain",
+            "value": "\"http://www.uibot123.cn\"",
+            "type": "none"
+        }
+    ],
+    "flow": [
+        {
+            "id": "start",
+            "rect": {
+                "x": 28,
+                "y": -10,
+                "width": 140,
+                "height": 50
+            },
+            "caption": "流程开始",
+            "type": "begin",
+            "next": {
+                "vertices": [],
+                "refId": "uibot38f02d1f717b28"
+            }
+        },
+        {
+            "id": "uibot38f02d1f717b28",
+            "rect": {
+                "x": 0,
+                "y": 80,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "初始化环境",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": "uibot38f02d2433022c"
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "init.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot38f02d2433022c",
+            "rect": {
+                "x": 0,
+                "y": 180,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "业务逻辑",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": "uibot38f02d255b0074"
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "run.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot38f02d255b0074",
+            "rect": {
+                "x": 0,
+                "y": 284,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "测试报告",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": "uibot38f039af5ccef6"
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "report.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot38f02da9b0a580",
+            "rect": {
+                "x": 494,
+                "y": 80,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "测试数据",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "data.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot38f039af5ccef6",
+            "rect": {
+                "x": 28,
+                "y": 384,
+                "width": 140,
+                "height": 50
+            },
+            "caption": "流程结束",
+            "type": "end"
+        },
+        {
+            "id": "uibot38f42c770b2dbc",
+            "rect": {
+                "x": 0,
+                "y": 470,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "模板工具库",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "common.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot38f649600a7808",
+            "rect": {
+                "x": 494,
+                "y": 180,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "chrome浏览器",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "case_chrome.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot3916955d2d2b0c",
+            "rect": {
+                "x": 250,
+                "y": 80,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "自定义初始化",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "my_init.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot3916955e366194",
+            "rect": {
+                "x": 250,
+                "y": 180,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "自定义扫尾",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "my_end.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "b2d0abd5-33f3-4a83-957c-eecb566065fd",
+            "rect": {
+                "x": 250,
+                "y": 284,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "自定义工具库",
+            "next": {},
+            "exception": {},
+            "file": "my_toolbox.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "0af3b439-d335-4ec2-a56e-2030b3a92cb8",
+            "rect": {
+                "x": 250,
+                "y": 470,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "debug",
+            "next": {},
+            "exception": {},
+            "file": "debug.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "c28ba330-62b1-11f0-972f-3d66c086fe67",
+            "rect": {
+                "x": 744,
+                "y": 180,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "UiBot内置浏览器",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "case_uibot.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "497cc940-62db-11f0-8098-e143152a9978",
+            "rect": {
+                "x": 494,
+                "y": 284,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "Edge浏览器",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "case_edge.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "f9468080-62e7-11f0-b866-731e05ec1ce0",
+            "rect": {
+                "x": 744,
+                "y": 80,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "Firefox浏览器",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "case_Firefox.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "578c0410-6376-11f0-aed9-4be63c028ca2",
+            "rect": {
+                "x": 994,
+                "y": 180,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "IE浏览器——调试未通过",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "case_IE.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "60243270-65e0-11f0-b5ff-874211883424",
+            "rect": {
+                "x": 994,
+                "y": 80,
+                "width": 196,
+                "height": 64
+            },
+            "caption": "360极速浏览器——调试未通过",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "case_360Speed.task",
+            "in": "",
+            "out": "",
+            "editorMode": "visual",
+            "breakpoints": {}
+        }
+    ],
+    "type": "flow",
+    "layout": {
+        "config": {
+            "global": {
+                "splitterSize": 1,
+                "splitterExtra": 8,
+                "enableEdgeDock": false,
+                "rootOrientationVertical": true,
+                "tabEnableClose": false,
+                "tabEnableRename": false,
+                "tabSetEnableDrag": false,
+                "tabSetEnableMaximize": false,
+                "tabSetMinWidth": 280,
+                "tabSetMinHeight": 200,
+                "borderBarSize": 24,
+                "borderAutoSelectTabWhenClosed": true,
+                "borderEnableAutoHide": true
+            },
+            "borders": [
+                {
+                    "type": "border",
+                    "selected": 0,
+                    "size": 250,
+                    "minSize": 250,
+                    "enableAutoHide": true,
+                    "location": "left",
+                    "children": [
+                        {
+                            "type": "tab",
+                            "id": "flow",
+                            "name": "流程",
+                            "component": "flowPanel",
+                            "config": {
+                                "i18nKey": "flow"
+                            },
+                            "className": ""
+                        },
+                        {
+                            "type": "tab",
+                            "id": "command",
+                            "name": "命令",
+                            "component": "commandPanel",
+                            "config": {
+                                "i18nKey": "command"
+                            },
+                            "className": ""
+                        },
+                        {
+                            "type": "tab",
+                            "id": "timeline",
+                            "name": "时间线",
+                            "component": "timeLinePanel",
+                            "config": {
+                                "i18nKey": "timeline"
+                            },
+                            "className": ""
+                        },
+                        {
+                            "type": "tab",
+                            "id": "search",
+                            "name": "搜索",
+                            "component": "searchPanel",
+                            "config": {
+                                "i18nKey": "search"
+                            },
+                            "className": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "border",
+                    "selected": 0,
+                    "size": 280,
+                    "minSize": 280,
+                    "location": "right",
+                    "children": [
+                        {
+                            "type": "tab",
+                            "id": "commandProperty",
+                            "name": "属性",
+                            "component": "commandPropertyPanel",
+                            "config": {
+                                "i18nKey": "property"
+                            },
+                            "className": ""
+                        },
+                        {
+                            "type": "tab",
+                            "id": "commandVariable",
+                            "name": "变量",
+                            "component": "commandVariablePanel",
+                            "config": {
+                                "i18nKey": "variable"
+                            },
+                            "className": ""
+                        }
+                    ]
+                }
+            ],
+            "layout": {
+                "type": "row",
+                "id": "body",
+                "children": [
+                    {
+                        "type": "tabset",
+                        "id": "#4d0ec4c5-e582-4d0b-8e51-8920a4760ea6",
+                        "weight": 45.1063829787234,
+                        "children": [
+                            {
+                                "type": "tab",
+                                "id": "38f02d1f7195d4",
+                                "name": "浏览器",
+                                "helpText": "D:\\git\\UibotTestFlowHub6\\test_flow_model\\main.prj",
+                                "component": "flowEditor",
+                                "config": {
+                                    "type": "project",
+                                    "id": "38f02d1f7195d4"
+                                },
+                                "enableClose": false,
+                                "className": "",
+                                "icon": "../../../assets/_/pages-next/home/childrens/main/assets/tab-flow.png"
+                            },
+                            {
+                                "type": "tab",
+                                "id": "uibot38f02d2433022c",
+                                "name": "业务逻辑",
+                                "helpText": "D:\\git\\UibotTestFlowHub6\\6.0.0\\软件自动化-浏览器\\run.task",
+                                "component": "taskNodeEditor",
+                                "config": {
+                                    "selfControl": true,
+                                    "id": "uibot38f02d2433022c",
+                                    "type": "task",
+                                    "selector": [
+                                        "uibot38f02d2433022c"
+                                    ]
+                                },
+                                "enableClose": true,
+                                "className": "",
+                                "icon": "../../../assets/_/pages-next/home/childrens/main/assets/tab-task.png"
+                            },
+                            {
+                                "type": "tab",
+                                "id": "38f02d1f7195d4-repository",
+                                "name": "界面库 - 浏览器",
+                                "helpText": "界面库 - 浏览器",
+                                "component": "repository",
+                                "config": {
+                                    "selfControl": false,
+                                    "id": "38f02d1f7195d4",
+                                    "selector": []
+                                },
+                                "enableClose": true,
+                                "className": "",
+                                "icon": "../../../assets/_/pages-next/home/childrens/main/assets/tab-res.png"
+                            },
+                            {
+                                "type": "tab",
+                                "id": "497cc940-62db-11f0-8098-e143152a9978",
+                                "name": "Edge浏览器",
+                                "helpText": "E:\\UibotTestFlowHub6\\6.0.0\\软件自动化-浏览器\\case_edge.task",
+                                "component": "taskNodeEditor",
+                                "config": {
+                                    "selfControl": true,
+                                    "id": "497cc940-62db-11f0-8098-e143152a9978",
+                                    "type": "task",
+                                    "selector": [
+                                        "497cc940-62db-11f0-8098-e143152a9978"
+                                    ]
+                                },
+                                "enableClose": true,
+                                "className": "",
+                                "icon": "../../../assets/_/pages-next/home/childrens/main/assets/tab-task.png"
+                            },
+                            {
+                                "type": "tab",
+                                "id": "uibot38f649600a7808",
+                                "name": "chrome浏览器",
+                                "helpText": "C:\\UibotTestFlowHub6\\6.0.0\\软件自动化-浏览器\\case_chrome.task",
+                                "component": "taskNodeEditor",
+                                "config": {
+                                    "selfControl": true,
+                                    "id": "uibot38f649600a7808",
+                                    "type": "task",
+                                    "selector": [
+                                        "uibot38f649600a7808"
+                                    ]
+                                },
+                                "enableClose": true,
+                                "className": "",
+                                "icon": "../../../assets/_/pages-next/home/childrens/main/assets/tab-task.png"
+                            },
+                            {
+                                "type": "tab",
+                                "id": "0af3b439-d335-4ec2-a56e-2030b3a92cb8",
+                                "name": "debug",
+                                "helpText": "C:\\UibotTestFlowHub6\\6.0.0\\软件自动化-浏览器\\debug.task",
+                                "component": "taskNodeEditor",
+                                "config": {
+                                    "selfControl": true,
+                                    "id": "0af3b439-d335-4ec2-a56e-2030b3a92cb8",
+                                    "type": "task",
+                                    "selector": [
+                                        "0af3b439-d335-4ec2-a56e-2030b3a92cb8"
+                                    ]
+                                },
+                                "enableClose": true,
+                                "className": "",
+                                "icon": "../../../assets/_/pages-next/home/childrens/main/assets/tab-task.png"
+                            },
+                            {
+                                "type": "tab",
+                                "id": "f9468080-62e7-11f0-b866-731e05ec1ce0",
+                                "name": "Firefox浏览器",
+                                "helpText": "C:\\UibotTestFlowHub6\\6.0.0\\软件自动化-浏览器\\case_Firefox.task",
+                                "component": "taskNodeEditor",
+                                "config": {
+                                    "selfControl": true,
+                                    "id": "f9468080-62e7-11f0-b866-731e05ec1ce0",
+                                    "type": "task",
+                                    "selector": [
+                                        "f9468080-62e7-11f0-b866-731e05ec1ce0"
+                                    ]
+                                },
+                                "enableClose": true,
+                                "className": "",
+                                "icon": "../../../assets/_/pages-next/home/childrens/main/assets/tab-task.png"
+                            },
+                            {
+                                "type": "tab",
+                                "id": "c28ba330-62b1-11f0-972f-3d66c086fe67",
+                                "name": "UiBot内置浏览器",
+                                "helpText": "C:\\UibotTestFlowHub6\\6.0.0\\软件自动化-浏览器\\case_uibot.task",
+                                "component": "taskNodeEditor",
+                                "config": {
+                                    "selfControl": true,
+                                    "id": "c28ba330-62b1-11f0-972f-3d66c086fe67",
+                                    "type": "task",
+                                    "selector": [
+                                        "c28ba330-62b1-11f0-972f-3d66c086fe67"
+                                    ]
+                                },
+                                "enableClose": true,
+                                "className": "",
+                                "icon": "../../../assets/_/pages-next/home/childrens/main/assets/tab-task.png"
+                            }
+                        ],
+                        "active": true
+                    },
+                    {
+                        "type": "tabset",
+                        "id": "buttom",
+                        "weight": 154.89361702127658,
+                        "height": 728,
+                        "config": {
+                            "height": 728,
+                            "selected": 0
+                        },
+                        "enableDrop": false,
+                        "enableDrag": false,
+                        "enableDivide": false,
+                        "enableClose": false,
+                        "minHeight": 32,
+                        "headerHeight": 32,
+                        "children": [
+                            {
+                                "type": "tab",
+                                "id": "output",
+                                "name": "输出",
+                                "component": "outputPanel",
+                                "config": {
+                                    "i18nKey": "output"
+                                },
+                                "enableDrag": false,
+                                "className": "",
+                                "enableRenderOnDemand": false
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "type": "flow",
+        "version": "1.0.21"
+    },
+    "flowConfig": {
+        "scrollbarPosition": {
+            "left": 1472,
+            "top": 1493
+        }
+    }
+}

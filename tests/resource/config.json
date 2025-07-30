@@ -1,0 +1,584 @@
+{
+    "url": "http://192.168.10.141/view/commander/static/commander.html?ui_locales=zh-CN",
+    "selectFlow": 4421185328644097,
+    "version": "1.0.3",
+    "versionDesc": "我是版本说明",
+    "descContent": "我是使用说明",
+    "name": "基本命令",
+    "pkgDestPath": "D:\\git\\UibotTestFlowHub6\\6.0.0\\基本命令-基本命令",
+    "guid": "38f02d1f7195d4",
+    "flow": "main.flowc",
+    "desc": "基本命令.html",
+    "res": "res",
+    "creatorVersion": "6.2.2",
+    "arch": "x86",
+    "platform": "win32",
+    "buildVersion": "2024.07.30.1956",
+    "productType": "enterprise",
+    "includeSourceCode": false,
+    "flowChat": [
+        {
+            "id": "start",
+            "rect": {
+                "x": -200,
+                "y": -20,
+                "width": 140,
+                "height": 50
+            },
+            "caption": "流程开始",
+            "type": "begin",
+            "next": {
+                "vertices": [],
+                "refId": "uibot38f02d1f717b28"
+            }
+        },
+        {
+            "id": "uibot38f02d1f717b28",
+            "rect": {
+                "x": -264,
+                "y": 70,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "初始化环境",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": "uibot38f02d2433022c"
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "init.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot38f02d2433022c",
+            "rect": {
+                "x": -264,
+                "y": 190,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "业务逻辑",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": "uibot38f02d255b0074"
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "run.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot38f02d255b0074",
+            "rect": {
+                "x": -264,
+                "y": 300,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "测试报告",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": "uibot38f039af5ccef6"
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "report.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot38f02da9b0a580",
+            "rect": {
+                "x": 324,
+                "y": 70,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "测试数据",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "data.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot38f039af5ccef6",
+            "rect": {
+                "x": -200,
+                "y": 414,
+                "width": 140,
+                "height": 50
+            },
+            "caption": "流程结束",
+            "type": "end"
+        },
+        {
+            "id": "uibot38f42c770b2dbc",
+            "rect": {
+                "x": -264,
+                "y": 500,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "模板工具库",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "common.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot3916955d2d2b0c",
+            "rect": {
+                "x": 30,
+                "y": 70,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "自定义初始化",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "my_init.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "id": "uibot3916955e366194",
+            "rect": {
+                "x": 30,
+                "y": 190,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "自定义扫尾",
+            "type": "task",
+            "next": {
+                "vertices": [],
+                "refId": ""
+            },
+            "exception": {
+                "vertices": [],
+                "refId": ""
+            },
+            "file": "my_end.task",
+            "in": "",
+            "out": "",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "b2d0abd5-33f3-4a83-957c-eecb566065fd",
+            "rect": {
+                "x": 30,
+                "y": 300,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "自定义工具库",
+            "next": {},
+            "exception": {},
+            "file": "my_toolbox.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "7bc1c565-39e3-46d7-9ae3-b5d0b3ab3872",
+            "rect": {
+                "x": 324,
+                "y": 190,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "延时命令",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_delay.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "05fb59c8-34d9-4172-bd4a-9b7d1dcfc193",
+            "rect": {
+                "x": 324,
+                "y": 300,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "转为逻辑数据",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_to_bool.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "57066410-cda4-11ec-aff9-51e75eefe89a",
+            "rect": {
+                "x": 324,
+                "y": 414,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "转为小数数据",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_to_number.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "694a4fdd-298c-4a0d-80d4-01d7ce6d4ef8",
+            "rect": {
+                "x": 324,
+                "y": 740,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "转为十进制数",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_to_decimal.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "46f7b1b0-cdb7-11ec-aff9-51e75eefe89a",
+            "rect": {
+                "x": 324,
+                "y": 522,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "转为整数数据",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_to_integer.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "90881ad0-cde0-11ec-aff9-51e75eefe89a",
+            "rect": {
+                "x": 324,
+                "y": 632,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "转为文字数据",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_to_str.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "03d6f97a-d38b-4465-bbce-0fb6cf2b2f3a",
+            "rect": {
+                "x": 30,
+                "y": 414,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "手动调试",
+            "next": {},
+            "exception": {},
+            "file": "流程块.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "2fbd0270-cf42-11ec-83ef-7dad5943c767",
+            "rect": {
+                "x": 624,
+                "y": 70,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "复制数据",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_dcopy.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "aede5e80-d007-11ec-bef9-1d1d80ea7c15",
+            "rect": {
+                "x": 624,
+                "y": 190,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "获取变量类型",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_get_type.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "7dbf4790-d00e-11ec-bef9-1d1d80ea7c15",
+            "rect": {
+                "x": 624,
+                "y": 300,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "是否为数组",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_is_array.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "d07f2090-d031-11ec-bef9-1d1d80ea7c15",
+            "rect": {
+                "x": 624,
+                "y": 414,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "是否为字典",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_is_dict.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "f557bc40-d033-11ec-bef9-1d1d80ea7c15",
+            "rect": {
+                "x": 624,
+                "y": 522,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "是否为数值",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_is_number.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "c0f94080-d034-11ec-bef9-1d1d80ea7c15",
+            "rect": {
+                "x": 624,
+                "y": 632,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "是否为空",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_is_null.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "42e33280-d036-11ec-bef9-1d1d80ea7c15",
+            "rect": {
+                "x": 624,
+                "y": 740,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "获取长度",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_get_length.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "34fc9bd0-d03f-11ec-bef9-1d1d80ea7c15",
+            "rect": {
+                "x": 924,
+                "y": 70,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "取十六进制",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_get_hex.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "aaf0c770-d045-11ec-bef9-1d1d80ea7c15",
+            "rect": {
+                "x": 924,
+                "y": 190,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "取八进制",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_get_oct.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "1ab5bf2e-8af3-45ba-b746-a76a3d4517bc",
+            "rect": {
+                "x": 924,
+                "y": 300,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "获取随机数",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_random_num.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "ed96058d-4955-47d8-9739-42fe0a98108b",
+            "rect": {
+                "x": 924,
+                "y": 414,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "单元测试块",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_unittest.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "53ee9d20-d05f-11ec-88a4-1520c33c6e97",
+            "rect": {
+                "x": 924,
+                "y": 522,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "注释",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_rem.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "90151b00-d0d0-11ec-b33c-c943781fefec",
+            "rect": {
+                "x": 924,
+                "y": 632,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "子程序",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_functon.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "cea6a4e0-d0d2-11ec-b33c-c943781fefec",
+            "rect": {
+                "x": 924,
+                "y": 740,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "删除指定元素",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_del_item.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        },
+        {
+            "type": "task",
+            "id": "3a60808d-5409-4007-8e2e-fbe9b1ebe86c",
+            "rect": {
+                "x": 324,
+                "y": 848,
+                "width": 268,
+                "height": 78
+            },
+            "caption": "垃圾回收",
+            "next": {},
+            "exception": {},
+            "file": "base_cmd_gc.task",
+            "editorMode": "sourceCode",
+            "breakpoints": {}
+        }
+    ],
+    "parameters": []
+}

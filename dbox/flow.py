@@ -129,7 +129,7 @@ def version_increment(version: str, step: int = 10) -> str:
     """获取下一版本号
     版本号如：1.0.0，返回1.0.1
     :param version: 版本号
-    :param step: 版本号递增步长
+    :param step: 版本号进位步长，不是版本号递增步长，递增每次都是加1
     :return 下一版本号
     """
     # 将版本号字符串拆分为整数列表
