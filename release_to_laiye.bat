@@ -1,7 +1,7 @@
 @echo off
-rd /q /s build
-rd /q /s dist
-rd /q /s dbox.egg-info
+rmdir /q /s build
+rmdir /q /s dist
+rmdir /q /s dbox.egg-info
 echo "After the last packing record is cleared, press any key to continue packing"
 pause
 

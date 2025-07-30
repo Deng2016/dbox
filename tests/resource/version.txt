@@ -1,0 +1,6 @@
+{
+    "Product": "UiBot Enterprise",
+    "Version": "6.0.0.221121",
+    "Build": "2022.11.21.1912",
+    "InstructionSet": "x64"
+}

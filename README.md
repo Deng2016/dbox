@@ -98,6 +98,47 @@ pip install -e .
 
 - Python 3.7+
 - 依赖包：
+
+## 🛠️ 开发环境设置
+
+### 推荐 IDE
+- **PyCharm Professional** - 功能强大的 Python IDE
+- **Visual Studio Code** - 轻量级编辑器，配合 Python 扩展
+
+### VS Code 配置
+1. 安装推荐的 Python 扩展：
+   - Python
+   - Pylance
+   - Python Test Explorer
+
+2. 复制项目配置：
+   ```bash
+   cp .vscode/settings.example.json .vscode/settings.json
+   ```
+
+3. 根据个人环境调整配置中的路径，特别是 Python 解释器路径。
+
+### PyCharm 配置
+1. 打开项目
+2. 设置 Python 解释器为项目的虚拟环境
+3. 配置测试运行器为 pytest
+4. 设置代码风格为 Black（120 字符行长度）
+
+### 虚拟环境设置
+```bash
+# 创建虚拟环境
+python -m venv venv
+
+# 激活虚拟环境
+# Windows
+venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+
+# 安装依赖
+pip install -r requirements-test.txt
+pip install -e .
+```
   - requests >= 2.26.0
   - redis == 3.5.3
   - pycryptodome == 3.11.0
