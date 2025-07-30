@@ -148,13 +148,13 @@ source venv/bin/activate
 pip install -r requirements-test.txt
 pip install -e .
 ```
-  - requests >= 2.26.0
-  - redis == 3.5.3
-  - pycryptodome == 3.11.0
-  - xpinyin == 0.7.6
-  - pysmb == 1.2.10
-  - pyjwt == 2.8.0
-  - pytz >= 2025.2
+  - requests ~= 2.32.4
+  - redis ~= 6.2.0
+  - pycryptodome ~= 3.23.0
+  - xpinyin ~= 0.7.7
+  - pysmb ~= 1.2.11
+  - pyjwt ~= 2.10.1
+  - pytz ~= 2025.2
 
 ## 📖 使用示例
 
