@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 from .utils import execute_cmd, byte_to_str, bytes_to_str, ExecuteCMDException
 
 
-logger = logging.getLogger("DBoxUtils")
+logger = logging.getLogger("DBox")
 
 
 def get_system_info(win_rm_session=None) -> dict:

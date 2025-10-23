@@ -4,11 +4,14 @@ import logging.handlers
 from pathlib import Path
 
 
-__version__ = "2025.8.1.1"
-log_format = logging.Formatter("[%(asctime)s] %(name)s/%(filename)s/%(lineno)s/%(funcName)s/%(levelname)s: %(message)s")
+__version__ = "2025.10.23.1"
+__commit_id__ = "{{COMMIT_ID}}"
+log_format = logging.Formatter(
+    "[%(asctime)s] %(threadName)s/%(name)s/%(filename)s/%(lineno)s/%(funcName)s/%(levelname)s: %(message)s"
+)
 
 # 日志句柄
-logger = logging.getLogger("DBoxUtils")
+logger = logging.getLogger("DBox")
 # 此处必须为DEBUG，否则在UiBot中多次加载时会覆盖configure_logger中level配置
 logger.setLevel(logging.DEBUG)
 
@@ -233,11 +236,11 @@ def configure_logger(
     logger.debug(f"日志配置完成，当前日志处理器：{logger.handlers}")
 
 
-logger.info(f"当前dbox库版本号：{__version__}")
+logger.info(f"当前dbox库版本号：{__version__}，唯一版本标识：{__commit_id__}")
 
-if sys.version_info < (3, 13):
+if sys.version_info < (3, 12):
     logger.warning(
-        "\033[91m[警告] 当前 Python 版本为 {}.{}，本项目仅保证 3.13 及以上版本兼容，低版本可能存在不兼容问题。\033[0m".format(
+        "\033[91m[警告] 当前 Python 版本为 {}.{}，本项目仅保证 3.12 及以上版本兼容，低版本可能存在不兼容问题。\033[0m".format(
             sys.version_info.major, sys.version_info.minor
         )
     )

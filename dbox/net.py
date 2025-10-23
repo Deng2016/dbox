@@ -12,7 +12,7 @@ from . import file as file_utils
 from . import encrypt as encrypt_utils
 
 
-logger = logging.getLogger("DBoxUtils")
+logger = logging.getLogger("DBox")
 
 
 def get_host_ip(reference: str = "") -> str:

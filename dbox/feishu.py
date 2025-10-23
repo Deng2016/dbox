@@ -15,7 +15,7 @@ from dbox import time as time_utils
 from dbox import my_http as http_utils
 
 
-logger = logging.getLogger("DBoxUtils")
+logger = logging.getLogger("DBox")
 
 url_model = "https://open.feishu.cn/open-apis/bot/v2/hook/{0}"
 headers = {"Content-Type": "application/json; charset=utf-8"}

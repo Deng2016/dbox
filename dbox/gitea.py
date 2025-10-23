@@ -17,7 +17,7 @@ from .my_http import format_output
 
 __all__ = ["is_checkout", "tetrieve_branch", "get_tags", "get_commit_default"]
 
-logger = logging.getLogger("DBoxUtils")
+logger = logging.getLogger("DBox")
 
 DOMAIN = os.environ["GIT_CI_API_URL"]
 ACCESS_TOKEN = os.environ["GIT_CI_TOKEN"]

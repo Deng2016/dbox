@@ -24,7 +24,7 @@ IP_ADDRESS = None
 USERNAME = None
 PASSWORD = None
 
-logger = logging.getLogger("DBoxUtils")
+logger = logging.getLogger("DBox")
 
 try:
     COM_SAMBA: dict = json.loads(to_decode(os.environ["COM_SAMBA"]))

@@ -14,7 +14,7 @@ from .git import parser_git_url
 from .my_http import format_output
 
 
-logger = logging.getLogger("DBoxUtils")
+logger = logging.getLogger("DBox")
 
 DOMAIN = os.environ["GITHUB_CI_API_URL"].strip(" /")
 ACCESS_TOKEN = os.environ["GITHUB_CI_TOKEN"]

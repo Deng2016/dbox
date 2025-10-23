@@ -11,7 +11,7 @@ from pathlib import Path
 from . import utils, message, file
 
 
-logger = logging.getLogger("DBoxUtils")
+logger = logging.getLogger("DBox")
 
 
 def check_branch_exist(repo_path: str | Path, branch: str, remote: str = "") -> bool:
