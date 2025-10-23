@@ -35,7 +35,7 @@ setup(
             "README_TESTS.md",
         ]
     },
-    python_requires=">=3.13",
+    python_requires=">=3.12",
     install_requires=[
         "requests~=2.32.4",
         "redis~=6.2.0",
@@ -48,6 +48,7 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: Implementation",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
         "Topic :: Software Development :: Libraries",
     ],

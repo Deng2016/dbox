@@ -1,6 +1,6 @@
 # DBox - 个人常用工具类封装
 
-[![Python](https://img.shields.io/badge/Python-3.13+-blue.svg)](https://www.python.org/downloads/)
+[![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-2025.8.1.1-orange.svg)](https://pypi.org/project/dbox/)
 
@@ -89,8 +89,8 @@ pip install git+https://github.com/Deng2016/dbox@master
 
 ### 开发模式安装
 ```bash
-# 确保使用 Python 3.13 或更高版本
-python --version  # 应该显示 Python 3.13.x 或更高版本
+# 确保使用 Python 3.12 或更高版本
+python --version  # 应该显示 Python 3.12.x 或更高版本
 
 git clone https://github.com/Deng2016/dbox.git
 cd dbox
@@ -99,13 +99,13 @@ pip install -e .
 
 ## 🔧 环境要求
 
-- Python 3.13+
+- Python 3.12+
 - 依赖包：
 
 ## 🛠️ 开发环境设置
 
 ### Python 版本要求
-⚠️ **重要**：本项目推荐使用 Python 3.13 及更高版本，低版本可能存在兼容性问题。
+⚠️ **重要**：本项目推荐使用 Python 3.12 及更高版本，低版本可能存在兼容性问题。
 
 ### 推荐 IDE
 - **PyCharm Professional** - 功能强大的 Python IDE
@@ -132,8 +132,8 @@ pip install -e .
 
 ### 虚拟环境设置
 ```bash
-# 确保使用 Python 3.13 或更高版本
-python --version  # 应该显示 Python 3.13.x 或更高版本
+# 确保使用 Python 3.12 或更高版本
+python --version  # 应该显示 Python 3.12.x 或更高版本
 
 # 创建虚拟环境
 python -m venv venv
@@ -262,13 +262,13 @@ export COM_SAMBA='{"username":"user","password":"pass","host":"192.168.1.100"}'
 - 修复所有类型注解问题
 - 优化代码结构和错误处理
 - 更新依赖包版本
-- **重要变更**：推荐使用 Python 3.13 及更高版本，低版本可能存在兼容性问题
+- **重要变更**：推荐使用 Python 3.12 及更高版本，低版本可能存在兼容性问题
 
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request！
 
-**重要**：请确保使用 Python 3.13 或更高版本进行开发和测试，低版本可能存在兼容性问题。
+**重要**：请确保使用 Python 3.12 或更高版本进行开发和测试，低版本可能存在兼容性问题。
 
 1. Fork 本仓库
 2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
