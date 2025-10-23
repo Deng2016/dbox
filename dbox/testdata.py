@@ -16,26 +16,26 @@ from .addressinfo import addr
 from .bankinfo import bank_bin_list
 
 
-def get_random_data(
+def get_random_date(
     start_date: datetime.date | datetime.datetime | str = "",
     end_date: datetime.date | datetime.datetime | str = "",
-    _format: str = "%Y-%m-%d",
+    date_format: str = "%Y-%m-%d",
 ) -> str:
     """
     随机生成日期
     :param start_date: 起始日期，格式为"%Y-%m-%d"
     :param end_date: 截止日期，格式为"%Y-%m-%d"
-    :param _format: 输出格式，默认为"%Y%m%d"
-    :return: 随机日期，格式为format
+    :param date_format: 输出格式，默认为"%Y%m%d"
+    :return: 随机日期，格式为date_format
     """
     if not start_date:
         start_date = datetime.date(1949, 1, 1)
     elif isinstance(start_date, str):
-        start_date = datetime.datetime.strptime(start_date, _format)
+        start_date = datetime.datetime.strptime(start_date, date_format)
     if not end_date:
         end_date = datetime.datetime.now().date()
     elif isinstance(end_date, str):
-        end_date = datetime.datetime.strptime(end_date, _format)
+        end_date = datetime.datetime.strptime(end_date, date_format)
 
     # 统一转换为 datetime 对象以便计算
     if isinstance(start_date, datetime.date):
@@ -43,10 +43,10 @@ def get_random_data(
     if isinstance(end_date, datetime.date):
         end_date = datetime.datetime.combine(end_date, datetime.time.max)
 
-    diff_days = (end_date - start_date).days + 1
-    random_days = random.randint(0, diff_days - 1)
-    random_date = start_date + datetime.timedelta(days=random_days)
-    return random_date.strftime(_format)
+    days_difference = (end_date - start_date).days + 1
+    random_days_offset = random.randint(0, days_difference - 1)
+    random_date = start_date + datetime.timedelta(days=random_days_offset)
+    return random_date.strftime(date_format)
 
 
 def get_random_string(length: int = 32, source: str = "dlu") -> str:
@@ -54,48 +54,63 @@ def get_random_string(length: int = 32, source: str = "dlu") -> str:
     :param length: int, 返回字符数量
     :param source: str, d代表数字，l代表26个小写字母，u代表26个大写字母，s代表所有
     """
-    raw_str = ""
+    char_pool = ""
     # s 包含所有字符，故直接重新赋值
     if "s" in source:
-        raw_str = string.printable[:-6]
+        char_pool = string.printable[:-6]
     else:
         if "d" in source:
-            raw_str += string.digits
+            char_pool += string.digits
         if "l" in source:
-            raw_str += string.ascii_lowercase
+            char_pool += string.ascii_lowercase
         if "u" in source:
-            raw_str += string.ascii_uppercase
-    return "".join(random.choices(raw_str, k=length))
+            char_pool += string.ascii_uppercase
+
+    # 如果字符池为空，返回空字符串
+    if not char_pool or length <= 0:
+        return ""
+
+    return "".join(random.choices(char_pool, k=length))
 
 
 def get_uuid(length: int = 32) -> str:
-    _uuid36 = str(uuid.uuid1())
-    _uuid32 = _uuid36.replace("-", "")
+    if length <= 0:
+        return ""
+
+    uuid_with_hyphens = str(uuid.uuid1())
+    uuid_without_hyphens = uuid_with_hyphens.replace("-", "")
+
     if length == 36:
-        return _uuid36
+        return uuid_with_hyphens
     elif length == 32:
-        return _uuid32
+        return uuid_without_hyphens
+    elif length < 32:
+        return uuid_without_hyphens[:length]
     else:
-        return _uuid32[:length]
+        # 如果需要超过32位，重复UUID直到达到指定长度
+        result = uuid_without_hyphens
+        while len(result) < length:
+            result += str(uuid.uuid1()).replace("-", "")
+        return result[:length]
 
 
-def get_pinyin(name: str = "", joint_mark="") -> tuple[str, str]:
+def get_pinyin(name: str = "", separator="") -> tuple[str, str]:
     """获取拼音
     :param name: str, 需要转换拼音的汉字
-    :param joint_mark: str, 拼音连接符号
+    :param separator: str, 拼音连接符号
     :return 返回拼音与源汉字的元组
     """
     if not name:
         name = get_name()
 
-    p = Pinyin()
-    username = p.get_pinyin(name, joint_mark)
-    return username, name
+    pinyin_converter = Pinyin()
+    pinyin_result = pinyin_converter.get_pinyin(name, separator)
+    return pinyin_result, name
 
 
-def get_name(gender=""):
+def get_name(gender: int = 0):
     """获取中国人惯用姓名"""
-    firstnames = """
+    surnames = """
         赵钱孙李，周吴郑王。
         冯陈褚卫，蒋沈韩杨。
         朱秦尤许，何吕施张。
@@ -120,10 +135,10 @@ def get_name(gender=""):
         经房裘缪，干解应宗。
         丁宣贲邓，郁单杭洪。"""
 
-    firstnames = firstnames.replace("，", "").replace("。", "").replace("\n", "").replace(" ", "")
-    firstname = random.choice(firstnames)
+    surnames = surnames.replace("，", "").replace("。", "").replace("\n", "").replace(" ", "")
+    selected_surname = random.choice(surnames)
 
-    secondname_boy = """
+    male_names = """
     澄邈、德泽、海超、海阳、海荣、海逸、海昌、瀚钰、瀚文、涵亮、涵煦、涵蓄、涵衍、浩皛、浩波、浩博、浩初、浩宕、浩歌、浩广、浩邈、浩气、
     浩思、浩言、鸿宝、鸿波、鸿博、鸿才、鸿畅、鸿畴、鸿达、鸿德、鸿飞、鸿风、鸿福、鸿光、鸿晖、鸿朗、鸿文、鸿轩、鸿煊、鸿骞、鸿远、鸿云、
     鸿哲、鸿祯、鸿志、鸿卓、嘉澍、光济、澎湃、彭泽、鹏池、鹏海、浦和、浦泽、瑞渊、越泽、博耘、德运、辰宇、辰皓、辰钊、辰铭、辰锟、辰阳、
@@ -141,7 +156,7 @@ def get_name(gender=""):
     文景、曦哲、永昌、子昂、智宇、智晖、晗日、晗昱、瀚玥、瀚昂、昊硕、昊磊、昊东、鸿晖、绍晖、文昂、文景、曦哲、永昌、子昂、智宇、智晖、
     浩然、鸿运、辰龙、运珹、振宇、高朗、景平、鑫鹏、昌淼、炫明、昆皓、曜栋、文昂"""
 
-    secondname_grid = """
+    female_names = """
     恨桃、依秋、依波、香巧、紫萱、涵易、忆之、幻巧、水风、安寒、白亦、惜玉、碧春、怜雪、听南、念蕾、紫夏、凌旋、芷梦、凌寒、梦竹、千凡、
     采波、元冬、思菱、平卉、笑柳、雪卉、南蓉、谷梦、巧兰、绿蝶、飞荷、平安、芷荷、怀瑶、慕易、若芹、紫安、曼冬、寻巧、寄波、尔槐、以旋、
     初夏、依丝、怜南、傲菡、谷蕊、笑槐、飞兰、笑卉、迎荷、元冬、痴安、妙绿、觅雪、寒安、沛凝、白容、乐蓉、映安、依云、映冬、凡雁、梦秋、
@@ -158,110 +173,103 @@ def get_name(gender=""):
     元柏、代萱、紫真、千青、雪珍、寄琴、绿蕊、醉柳、诗翠、念瑶、孤风、曼彤、怀曼、香巧、采蓝、芷天、尔曼、巧蕊"""
 
     # 随机获取男名与女名
-    grid_name = random.choice(secondname_grid.replace("\n", "").replace(" ", "").split("、"))
-    boy_name = random.choice(secondname_boy.replace("\n", "").replace(" ", "").split("、"))
+    female_name = random.choice(female_names.replace("\n", "").replace(" ", "").split("、"))
+    male_name = random.choice(male_names.replace("\n", "").replace(" ", "").split("、"))
 
     # 将两个字的名字随机转换成双字或单字
     if random.randint(1, 3) == 1:
-        grid_name = random.choice(grid_name)
-        boy_name = random.choice(boy_name)
+        female_name = random.choice(female_name)
+        male_name = random.choice(male_name)
 
     # 男名or女名
-    if gender.lower() in ("girl", "woman"):
-        secondname = grid_name
-    elif gender.lower() in ("boy", "man"):
-        secondname = boy_name
-    elif isinstance(gender, int):
+    if isinstance(gender, int):
         if gender % 2 == 0:
-            secondname = grid_name
+            selected_given_name = female_name
         else:
-            secondname = boy_name
+            selected_given_name = male_name
     else:
-        secondname = random.choice([boy_name, grid_name])
+        selected_given_name = random.choice([male_name, female_name])
 
-    return f"{firstname}{secondname}"
+    return f"{selected_surname}{selected_given_name}"
 
 
-def check_idcards(idcards):
+def validate_id_card(id_card_number):
     """函数功能：
     校验模式：1. 校验中国大陆身份证号码的第18位是否正确；
     计算模式：2. 传入前17位，计算第18位校验码返回；
     返回为空时代码校验不通过；
     返回有值时代码校验通过，或是计算模式；
     """
-    check_code = ""
+    existing_check_code = ""
     # 统一转换成字符串类型
     try:
-        idcards = str(idcards)
+        id_card_number = str(id_card_number)
     except TypeError as e:
-        pass
+        return ""
 
     # 判断传入的身份证号码长度，如果为18位时顺便截取校验码
-    if len(idcards) == 18:
-        check_code = idcards[-1:]
-        idcards = idcards[:-1]
-    elif len(idcards) == 17:
+    if len(id_card_number) == 18:
+        existing_check_code = id_card_number[-1:]
+        id_card_number = id_card_number[:-1]
+    elif len(id_card_number) == 17:
         pass
     else:
-        print(f"输入的身份证号码【{idcards}】位数有误，必须是18位！")
         return False
-    if not idcards[:17].isdigit():
-        print(f"输入的身份证号码【{idcards}】前17位必须是数字！")
+
+    # 检查前17位是否都是数字
+    if not id_card_number[:17].isdigit():
+        return False
 
     # 至此已经被转成17位
     # 十七位数字本体码权重
-    weight = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
+    weights = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
     # 对应校验码字符值
-    validate = ["1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"]
+    check_codes = ["1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"]
 
-    _sum = 0
-    _mode = 0
+    weighted_sum = 0
     for i in range(0, 17):
-        try:
-            _sum = _sum + int(idcards[i]) * weight[i]
-        except TypeError as e:
-            print(f"输入的身份证号码【{idcards}】前17位必须是数字！")
-    _mode = _sum % 11
+        weighted_sum = weighted_sum + int(id_card_number[i]) * weights[i]
+    remainder = weighted_sum % 11
     # 计算模式
-    if check_code == "":
-        return validate[_mode]
+    if existing_check_code == "":
+        return check_codes[remainder]
     # 校验模式——校验通过
-    elif check_code == validate[_mode]:
-        return check_code
+    elif existing_check_code == check_codes[remainder]:
+        return existing_check_code
     # 校验模式——校验不通过
     else:
         return ""
 
 
-def get_idcards(sex=0):
+def generate_id_card(gender=0):
     """获取中国大陆18位身份证号码"""
     # part1: 随机获取地区编码
-    area_code = random.choice(addr)[0]
+    region_code = random.choice(addr)[0]
 
     # part2: 随机获取1949/10/01到当天的一个日期
     # 日期起始时间: 1949/10/01 00:00:00
-    birthdate = get_random_data(_format="%Y%m%d")
+    birth_date = get_random_date(date_format="%Y%m%d")
 
     # part3: 随机获取两位顺序码
-    sequence_code = random.randrange(11, 99)
+    sequence_number = random.randrange(11, 99)
 
-    # part4：性别编码：奇怪代表男性，偶数代码女性
-    if sex == 0:
-        sex_code = random.randrange(1, 10)
-    elif sex % 2 == 1:
-        sex_code = random.randrange(1, 10, 2)
+    # part4：性别编码：奇数代表男性，偶数代表女性
+    if gender == 0:
+        gender_code = random.randrange(1, 10)
+    elif gender % 2 == 1:
+        gender_code = random.randrange(1, 10, 2)
     else:
-        sex_code = random.randrange(2, 10, 2)
+        gender_code = random.randrange(2, 10, 2)
 
     # part5: 计算校验码
-    check_code = check_idcards(f"{area_code}{birthdate}{sequence_code}{sex_code}")
+    validation_code = validate_id_card(f"{region_code}{birth_date}{sequence_number}{gender_code}")
 
-    return f"{area_code}{birthdate}{sequence_code}{sex_code}{check_code}"
+    return f"{region_code}{birth_date}{sequence_number}{gender_code}{validation_code}"
 
 
-def get_mobile_no():
+def generate_mobile_number():
     """生成随机手机号码"""
-    phone_head = [
+    phone_prefixes = [
         130,
         131,
         132,
@@ -293,81 +301,81 @@ def get_mobile_no():
         188,
         189,
     ]
-    phone_no = str(random.choice(phone_head)) + "".join(random.choices("0123456789", k=8))
-    return phone_no
+    phone_number = str(random.choice(phone_prefixes)) + "".join(random.choices("0123456789", k=8))
+    return phone_number
 
 
-def get_phone_serial_no():
+def generate_phone_serial_number():
     """生成手机串号"""
-    serial_no = "".join(random.choices(string.ascii_uppercase, k=4))
-    serial_no += "-" + "".join(random.choices(string.ascii_uppercase, k=4))
-    serial_no += "-" + "".join(random.choices(string.digits, k=5))
-    return serial_no
+    serial_number = "".join(random.choices(string.ascii_uppercase, k=4))
+    serial_number += "-" + "".join(random.choices(string.ascii_uppercase, k=4))
+    serial_number += "-" + "".join(random.choices(string.digits, k=5))
+    return serial_number
 
 
-def get_bank_no(num=1, bank=None, bank_name=None, ftype=None, length=None, first=None):
+def generate_bank_card_number(card_count=1, bank_code=None, bank_name=None, card_type=None, card_length=None, return_single=None):
     """生成银联卡卡号
-    :param bank: 银行简称，大写字母，如工行ICBC，建行CCB，农行ABC等——非必填，默认随机
-    :param ftype: 卡片类型，储蓄卡DC，信用卡CC——非必填，默认随机
-    :param length: 卡号长度，信用卡基本上都是16位，储蓄卡通常16至19位，最长19位，但偶尔有低有16位的——非必填，默认随机
-    :param num: 一次生成的卡号数量——非必填，默认1
-    :param first: 为True时返回一个对象，非True时返回列表
+    :param bank_code: 银行简称，大写字母，如工行ICBC，建行CCB，农行ABC等——非必填，默认随机
+    :param card_type: 卡片类型，储蓄卡DC，信用卡CC——非必填，默认随机
+    :param card_length: 卡号长度，信用卡基本上都是16位，储蓄卡通常16至19位，最长19位，但偶尔有16位的——非必填，默认随机
+    :param card_count: 一次生成的卡号数量——非必填，默认1
+    :param return_single: 为True时返回一个对象，非True时返回列表
     """
 
-    if length and (int(length) < 16 or int(length) > 19):
-        raise ValueError("银联卡号通常是16到19数字，请检查输入的length参数")
+    if card_length and (int(card_length) < 16 or int(card_length) > 19):
+        raise ValueError("银联卡号通常是16到19数字，请检查输入的card_length参数")
 
     # 获取参数获取bin码
-    bin_list = get_bank_bin(num=num, bank=bank, bank_name=bank_name, ftype=ftype, length=length)
+    bin_list = get_bank_bin(num=card_count, bank=bank_code, bank_name=bank_name, ftype=card_type, length=card_length)
 
-    for bin in bin_list:
-        __get_bank_no(bin_obj=bin)
-    if first:
+    for bin_info in bin_list:
+        __generate_bank_number(bin_obj=bin_info)
+    if return_single:
         return bin_list[0]
     else:
         return bin_list
 
 
-def __get_bank_no(bin_obj):
+def __generate_bank_number(bin_obj):
     if not bin_obj["bin"].isdigit():
         raise ValueError("银行卡BIN应该为6位数字")
 
     # 中间数字长度=长度 - 6位bin长度 - 末位校验码
-    part2_length = int(bin_obj["length"]) - len(bin_obj["bin"]) - 1
-    bank_part2 = ""
-    for i in range(part2_length):
-        bank_part2 += str(random.randint(0, 9))
+    middle_digits_length = int(bin_obj["length"]) - len(bin_obj["bin"]) - 1
+    middle_digits = ""
+    for i in range(middle_digits_length):
+        middle_digits += str(random.randint(0, 9))
 
     # 计算末尾校验码
-    bank_no = bin_obj["bin"] + bank_part2
-    fsum = 0
-    _index = 0
+    bank_number = bin_obj["bin"] + middle_digits
+    luhn_sum = 0
+    digit_index = 0
     while True:
-        _index -= 1
+        digit_index -= 1
         try:
-            _value = int(bank_no[_index])
+            digit_value = int(bank_number[digit_index])
         except IndexError as e:
             break
         # 判断位置
-        if abs(_index) % 2 == 1:
+        if abs(digit_index) % 2 == 1:
             # 倒数：奇数位时*2
-            _value *= 2
-            if _value >= 10:
+            digit_value *= 2
+            if digit_value >= 10:
                 # 十位数时：取个位数字与十位数字相加
-                fsum += _value - 9
+                luhn_sum += digit_value - 9
             else:
                 # 个位数时：直接采用
-                fsum += _value
+                luhn_sum += digit_value
         else:
             # 倒数：偶数位时直接相加
-            fsum += _value
+            luhn_sum += digit_value
     # 拼接末尾校验码
-    if fsum % 10 == 0:
-        check_no = 0
+    if luhn_sum % 10 == 0:
+        check_digit = 0
     else:
-        check_no = 10 - fsum % 10
-    bank_no += str(check_no)
-    bin_obj["no"] = bank_no
+        check_digit = 10 - luhn_sum % 10
+    bank_number += str(check_digit)
+    bin_obj["no"] = bank_number
     return bin_obj
 
 
@@ -383,16 +391,16 @@ def get_bank_bin(
         length = str(length)
     bin_list = []
     # 根据条件过滤
-    for _bin in bank_bin_list:
-        if bank and _bin["bank"] != bank:
+    for bin_info in bank_bin_list:
+        if bank and bin_info["bank"] != bank:
             continue
-        if bank_name and not _bin["name"].startswith(bank_name):
+        if bank_name and not bin_info["name"].startswith(bank_name):
             continue
-        if ftype and _bin["type"] != ftype:
+        if ftype and bin_info["type"] != ftype:
             continue
-        if length and _bin["length"] != length:
+        if length and bin_info["length"] != length:
             continue
-        bin_list.append(_bin)
+        bin_list.append(bin_info)
     if not bin_list:
         if ftype == "CC" and length and int(length) > 16:
             raise ValueError("找不到对应的bin码，信用卡通常是16位，请检查输入的length参数")
@@ -403,6 +411,6 @@ def get_bank_bin(
         return random.choices(bin_list, k=num)
 
 
-def get_special_character(count: int):
-    raw_str = '''①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂⒃⒄⒅⒆⒇⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛㊀㊁㊂㊃㊄㊅㊆㊇㊈㊉㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩№½⅓⅔¼¾⅛⅜⅝⅞+-×÷﹢﹣±/=∥∠≌∽≦≧≒﹤﹥≈≡≠=≤≥<>≮≯∷∶∫∮∝∞∧∨∑∏∪∩∈∵∴⊥∥∠⌒⊙√∟⊿㏒㏑%‰ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζνξοπρσηθικλμτυφχψω㋀㋁㋂㋃㋄㋅㋆㋇㋈㋉㋊㋋㏠㏡㏢㏣㏤㏥㏦㏧㏨㏩㏪㏫㏬㏭㏮㏯㏰㏱㏲㏳㏴㏵㏶㏷㏸㏹㏺㏻㏼㏽㏾㍘㍙㍚㍛㍜㍝㍞㍟㍠㍡㍢㍣㍤㍥㍦㍧㍨㍩㍪㍫㍬㍭㍯㍰㊐㊊㊎㊍㊌㊋㊏㊑㊒㊓㊔㊕㊖㊗㊘㊜㊝㊞㊟㊠㊡㊢㊩㊪㊫㊬㊭㊮㊯㊰㊙㊚㊛㊣㊤㊥㊦㊧㊨囍㈱㍿卐卍ォミ灬彡ツ♩♪♫♬¶♭♯♮∮‖§Ψ⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ零壹贰叁伍陆柒捌玖佰仟万亿☀☼♨☁☂☽☾❄❅❆☃©®℃℉♂♀㎡℗Ω㏎￼㎎㎏㎜㎝㎞㎡㏄㏎㏑㏒㏕℡%‰°′″￠℅￥$€￡₴$₰¢₤₳₲₪₵₣₱฿¤₡₮₭₩ރ₢₥₫₦zł﷼₠₧₯₨Kčर₹ƒ₸￠┏┳┓┌┬┐╔╦╗╓╥╖╒╤╕╭╮╱╲─│┱┲╃╄┣╋┫├┼┤╠╬╣╟╫╢╞╪╡╰╯╲╱━┇┅┋┗┻┛└┴┘╚╩╝╙╨╜╘╧╛═║︴﹏﹋﹌✱✲✳❃✾✽✼✻✺✹✸✷✶✵✴❄❅❆❇❈❉❊❋✱❤♡♥❥♠♣♤ღ❣★☆✡✦✧✩✪✫✬✭✮✯✰☑✓✔√☓☒✘ㄨ✕✖✗❏❐❑❒▏▐░▒▓▔▕■□▢▣▤▥▦▧▨▩▪▫▬▭▮▯ˍ∎⊞⊟⊠⊡⋄▱◆◇◈◧◨◩◪◫◙◘▀▁▂▃▄▅▆▇▉▊▋█▌▍▎▰⊙●○◕¤☪❂✪☻☼Θ⊖⊘⊕⊚⊛⊜⊝◉◌◍◐◑◒◓◔⊗◖◗◯◤◥◄►▶◀◣◢▲▼▸◂▴▾△▽▷◁⊿▻◅▵▿▹◃∆◬◭◮∇☢乾☰兑☱离☲震☳巽☴坎☵艮☶坤☷☯。，、：∶；''""〝〞ˆˇ﹕︰﹔﹖﹑·¨.¸;´？！～—｜‖＂〃｀@﹫¡¿﹏﹋︴々﹟#﹩$﹠&﹪%﹡﹢×﹦‐￣¯―﹨˜﹍﹎＿-~（）〈〉‹›﹛﹜『』〖〗［］《》〔〕}」【】︵︷︿︹︽_︶︸﹀︺︾ˉ﹂﹄︼﹁﹃︻▲●□…→āáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜüêɑńňǹɡㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄧㄨㄩぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖ゚゛゜ゝゞゟ゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーヽヾヿ㍿ㄱㄲㄳㄴㄵㄶㄷㄸㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅃㅄㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅥㅦㅧㅨㅩㅪㅫㅬㅭㅮㅯㅰㅱㅲㅳㅴㅵㅶㅷㅸㅹㅺㅻㅼㅽㅾㅿㆀㆁㆂㆃㆄㆅㆆㆇㆈㆉㆊАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя←↑→↓↙↘↖↗↰↱↲↳↴↵↶↺↻↷➝⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛↯↹↔↕⇦⇧⇨⇩➫➬➩➪➭➮➯➱⏎➜➡➥➦➧➨➷➸➻➼➽➸➹➳➤➟➲➢➣➞⇪➚➘➙➛➺⇞⇟⇠⇡⇢⇣⇤⇥↜↝♐➴➵➶↼↽↾↿⇀⇁⇂⇃↞↟↠↡↢↣↤↪↫↬↭↮↯↩⇜⇝↸↚↛↥↦↧↨✐✎✏✑✒✍✉✁✂✃✄✆✉☎☏☢☠☣✈☜☞☝✍☚☟✌♤♧♡♢♠♣♥♦☀☁☂❄☃♨웃유❖☽☾☪✿♂♀✪✯☭➳卍卐√×■◆●○◐◑✙☺☻❀⚘♔♕♖♗♘♙♚♛♜♝♞♟♧♡♂♀♠♣♥❤⊙◎☺☻☼▧▨♨◐◑↔↕▪▒◊◦▣▤▥▦▩◘◈◇♬♪♩♭♪の★☆→あぃ￡Ю〓§♤♥▶¤✲❈✿✲❈➹☀☂☁【】┱┲❣✚✪✣✤✥✦❉❥❦❧❃❂❁❀✄☪☣☢☠☪♈ºº₪¤큐«»™♂✿♥☺☻｡◕‿◕｡｡◕‿◕｡◕‿-｡◉◞◟◉⊙‿⊙⊙▂⊙⊙０⊙⊙︿⊙⊙ω⊙⊙﹏⊙⊙△⊙⊙▽⊙∩▂∩∩０∩∩︿∩∩ω∩∩﹏∩∩△∩∩▽∩●▂●●０●●︿●●ω●●﹏●●△●●▽●∪▂∪∪０∪∪︿∪∪ω∪∪﹏∪∪△∪∪▽∪≧▂≦≧０≦≧︿≦≧ω≦≧﹏≦≧△≦≧▽≦＞▂＜＞０＜＞︿＜＞ω＜＞﹏＜＞△＜＞▽＜╯▂╰╯０╰╯︿╰╯ω╰╯﹏╰╯△╰╯▽╰＋▂＋＋０＋＋︿＋＋ω＋﹏＋＋△＋＋▽＋ˋ▂ˊˋ０ˊˋ︿ˊˋωˊˋ﹏ˊˋ△ˊˋ▽ˊˇ▂ˇˇ０ˇˇ︿ˇˇωˇˇ﹏ˇˇ△ˇˇ▽ˇ˙▂˙˙０˙˙︿˙˙ω˙˙﹏˙˙△˙˙▽˙≡(▔﹏▔)≡⊙﹏⊙∥∣°ˋ︿ˊ﹀-#╯︿╰﹀(=‵′=)<(‵^′)>(ˉ▽ˉ；)(-__-)b＼＿／￣□￣｜｜------\(˙<>˙)/------<("""O""">(‵▽′)ψ（°ο°）~@?(^人)?(＊?↓˙＊)(O^~^O)[>\/<]↓。υ。↓(；°○°)(>c<)艹丶灬丨彡丿丬巛o氵刂卩s宀卩刂阝肀忄冫丿氵彡丬丨丩丬丶丷丿乀乁乂乄乆乛亅亠亻冂冫冖凵刂辶釒钅阝飠牜饣卩卪厸厶厽孓宀巛巜彳廴彡彐彳忄扌攵氵灬爫犭疒癶礻糹纟罒罓耂艹訁覀兦亼亽亖亗吂凸凹卝卍卐匸皕旡玊尐幵'''
-    return "".join(random.choices(raw_str, k=count))
+def get_special_character(character_count: int):
+    special_chars = r'''①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂⒃⒄⒅⒆⒇⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛㊀㊁㊂㊃㊄㊅㊆㊇㊈㊉㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩№½⅓⅔¼¾⅛⅜⅝⅞+-×÷﹢﹣±/=∥∠≌∽≦≧≒﹤﹥≈≡≠=≤≥<>≮≯∷∶∫∮∝∞∧∨∑∏∪∩∈∵∴⊥∥∠⌒⊙√∟⊿㏒㏑%‰ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζνξοπρσηθικλμτυφχψω㋀㋁㋂㋃㋄㋅㋆㋇㋈㋉㋊㋋㏠㏡㏢㏣㏤㏥㏦㏧㏨㏩㏪㏫㏬㏭㏮㏯㏰㏱㏲㏳㏴㏵㏶㏷㏸㏹㏺㏻㏼㏽㏾㍘㍙㍚㍛㍜㍝㍞㍟㍠㍡㍢㍣㍤㍥㍦㍧㍨㍩㍪㍫㍬㍭㍯㍰㊐㊊㊎㊍㊌㊋㊏㊑㊒㊓㊔㊕㊖㊗㊘㊜㊝㊞㊟㊠㊡㊢㊩㊪㊫㊬㊭㊮㊯㊰㊙㊚㊛㊣㊤㊥㊦㊧㊨囍㈱㍿卐卍ォミ灬彡ツ♩♪♫♬¶♭♯♮∮‖§Ψ⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ零壹贰叁伍陆柒捌玖佰仟万亿☀☼♨☁☂☽☾❄❅❆☃©®℃℉♂♀㎡℗Ω㏎￼㎎㎏㎜㎝㎞㎡㏄㏎㏑㏒㏕℡%‰°′″￠℅￥$€￡₴$₰¢₤₳₲₪₵₣₱฿¤₡₮₭₩ރ₢₥₫₦zł﷼₠₧₯₨Kčर₹ƒ₸￠┏┳┓┌┬┐╔╦╗╓╥╖╒╤╕╭╮╱╲─│┱┲╃╄┣╋┫├┼┤╠╬╣╟╫╢╞╪╡╰╯╲╱━┇┅┋┗┻┛└┴┘╚╩╝╙╨╜╘╧╛═║︴﹏﹋﹌✱✲✳❃✾✽✼✻✺✹✸✷✶✵✴❄❅❆❇❈❉❊❋✱❤♡♥❥♠♣♤ღ❣★☆✡✦✧✩✪✫✬✭✮✯✰☑✓✔√☓☒✘ㄨ✕✖✗❏❐❑❒▏▐░▒▓▔▕■□▢▣▤▥▦▧▨▩▪▫▬▭▮▯ˍ∎⊞⊟⊠⊡⋄▱◆◇◈◧◨◩◪◫◙◘▀▁▂▃▄▅▆▇▉▊▋█▌▍▎▰⊙●○◕¤☪❂✪☻☼Θ⊖⊘⊕⊚⊛⊜⊝◉◌◍◐◑◒◓◔⊗◖◗◯◤◥◄►▶◀◣◢▲▼▸◂▴▾△▽▷◁⊿▻◅▵▿▹◃∆◬◭◮∇☢乾☰兑☱离☲震☳巽☴坎☵艮☶坤☷☯。，、：∶；''""〝〞ˆˇ﹕︰﹔﹖﹑·¨.¸;´？！～—｜‖＂〃｀@﹫¡¿﹏﹋︴々﹟#﹩$﹠&﹪%﹡﹢×﹦‐￣¯―﹨˜﹍﹎＿-~（）〈〉‹›﹛﹜『』〖〗［］《》〔〕}」【】︵︷︿︹︽_︶︸﹀︺︾ˉ﹂﹄︼﹁﹃︻▲●□…→āáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜüêɑńňǹɡㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄧㄨㄩぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖ゚゛゜ゝゞゟ゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーヽヾヿ㍿ㄱㄲㄳㄴㄵㄶㄷㄸㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅃㅄㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅥㅦㅧㅨㅩㅪㅫㅬㅭㅮㅯㅰㅱㅲㅳㅴㅵㅶㅷㅸㅹㅺㅻㅼㅽㅾㅿㆀㆁㆂㆃㆄㆅㆆㆇㆈㆉㆊАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя←↑→↓↙↘↖↗↰↱↲↳↴↵↶↺↻↷➝⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛↯↹↔↕⇦⇧⇨⇩➫➬➩➪➭➮➯➱⏎➜➡➥➦➧➨➷➸➻➼➽➸➹➳➤➟➲➢➣➞⇪➚➘➙➛➺⇞⇟⇠⇡⇢⇣⇤⇥↜↝♐➴➵➶↼↽↾↿⇀⇁⇂⇃↞↟↠↡↢↣↤↪↫↬↭↮↯↩⇜⇝↸↚↛↥↦↧↨✐✎✏✑✒✍✉✁✂✃✄✆✉☎☏☢☠☣✈☜☞☝✍☚☟✌♤♧♡♢♠♣♥♦☀☁☂❄☃♨웃유❖☽☾☪✿♂♀✪✯☭➳卍卐√×■◆●○◐◑✙☺☻❀⚘♔♕♖♗♘♙♚♛♜♝♞♟♧♡♂♀♠♣♥❤⊙◎☺☻☼▧▨♨◐◑↔↕▪▒◊◦▣▤▥▦▩◘◈◇♬♪♩♭♪の★☆→あぃ￡Ю〓§♤♥▶¤✲❈✿✲❈➹☀☂☁【】┱┲❣✚✪✣✤✥✦❉❥❦❧❃❂❁❀✄☪☣☢☠☪♈ºº₪¤큐«»™♂✿♥☺☻｡◕‿◕｡｡◕‿◕｡◕‿-｡◉◞◟◉⊙‿⊙⊙▂⊙⊙０⊙⊙︿⊙⊙ω⊙⊙﹏⊙⊙△⊙⊙▽⊙∩▂∩∩０∩∩︿∩∩ω∩∩﹏∩∩△∩∩▽∩●▂●●０●●︿●●ω●●﹏●●△●●▽●∪▂∪∪０∪∪︿∪∪ω∪∪﹏∪∪△∪∪▽∪≧▂≦≧０≦≧︿≦≧ω≦≧﹏≦≧△≦≧▽≦＞▂＜＞０＜＞︿＜＞ω＜＞﹏＜＞△＜＞▽＜╯▂╰╯０╰╯︿╰╯ω╰╯﹏╰╯△╰╯▽╰＋▂＋＋０＋＋︿＋＋ω＋﹏＋＋△＋＋▽＋ˋ▂ˊˋ０ˊˋ︿ˊˋωˊˋ﹏ˊˋ△ˊˋ▽ˊˇ▂ˇˇ０ˇˇ︿ˇˇωˇˇ﹏ˇˇ△ˇˇ▽ˇ˙▂˙˙０˙˙︿˙˙ω˙˙﹏˙˙△˙˙▽˙≡(▔﹏▔)≡⊙﹏⊙∥∣°ˋ︿ˊ﹀-#╯︿╰﹀(=‵′=)<(‵^′)>(ˉ▽ˉ；)(-__-)b＼＿／￣□￣｜｜------\(˙<>˙)/------<("""O""">(‵▽′)ψ（°ο°）~@?(^人)?(＊?↓˙＊)(O^~^O)[>\/<]↓。υ。↓(；°○°)(>c<)艹丶灬丨彡丿丬巛o氵刂卩s宀卩刂阝肀忄冫丿氵彡丬丨丩丬丶丷丿乀乁乂乄乆乛亅亠亻冂冫冖凵刂辶釒钅阝飠牜饣卩卪厸厶厽孓宀巛巜彳廴彡彐彳忄扌攵氵灬爫犭疒癶礻糹纟罒罓耂艹訁覀兦亼亽亖亗吂凸凹卝卍卐匸皕旡玊尐幵'''
+    return "".join(random.choices(special_chars, k=character_count))
