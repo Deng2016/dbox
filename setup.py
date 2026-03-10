@@ -15,25 +15,14 @@ setup(
     url="https://github.com/Deng2016/dbox",
     author="dqy",
     author_email="yu12377@163.com",
+    license="MIT",
+    # 避免生成 Core Metadata 的 License-File 字段（部分 twine/packaging 环境会误报不识别）
+    license_files=[],
     packages=find_packages(exclude=["tests", "tests.*"]),
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     package_data={
         "dbox": ["*.py"],
-    },
-    exclude_package_data={
-        "": [
-            ".gitignore",
-            "lab.py",
-            "tests/",
-            "*.bat",
-            "*.log",
-            "*.out",
-            "*.zip",
-            "*.txt",
-            "pytest.ini",
-            "README_TESTS.md",
-        ]
     },
     python_requires=">=3.12",
     install_requires=[
