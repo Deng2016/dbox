@@ -102,3 +102,4 @@ tests/tmp/
 
 # 项目特定 - 文档（保留重要的）
 # 注意：PACKAGING_GUIDE.md 应该被版本控制
+.claude/
