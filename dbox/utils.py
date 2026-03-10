@@ -103,16 +103,21 @@ def execute_cmd(
                 raise ExecuteCMDException(error_msg)
 
 
-def check_shell_run_result(res_code, desc=""):
+def check_shell_run_result(res_code, desc="", raise_error=False):
     """检查结果，非0时报错"""
     if res_code == 0:
         return True
     else:
-        raise ExecuteCMDException(f"{desc}命令执行失败，返回结果={res_code}")
+        if raise_error:
+            raise ExecuteCMDException(f"{desc}命令执行失败，返回结果={res_code}")
+        return False
 
 
 def my_json_serializable(o):
     """补充标准库中json serializable逻辑"""
+    # 对于基本类型直接返回，保持原样
+    if isinstance(o, (dict, list, tuple, str, int, float, bool, type(None))):
+        return o
     if isinstance(o, datetime.datetime):
         return o.strftime("%Y-%m-%d %H:%M:%S")
     if isinstance(o, datetime.date):
@@ -213,7 +218,10 @@ def stat_func_elapsed(func):
     @wraps(func)
     def _stat_func_elapsed(*args, **kwargs):
         func_name = func.__name__
-        func_desc = func.__doc__.strip().split()[0] or ""
+        if func.__doc__:
+            func_desc = func.__doc__.strip().split()[0] if func.__doc__.strip() else ""
+        else:
+            func_desc = ""
         logger.info(f"开始运行：{func_name}（{func_desc}）")
         start_time = time.perf_counter()
         try:
@@ -319,16 +327,18 @@ def get_caller_desc(depth: int) -> str:
 
 
 def get_excel_col_name_by_index(col_index: int) -> str:
-    """根据列索引获取Excel中的列名"""
-    if col_index <= 0:
-        raise ValueError("Excel列索引号为从1开始的正整数")
+    """根据列索引获取Excel中的列名
+    支持从0开始的索引：
+    - 0 -> A, 1 -> B, ... 25 -> Z, 26 -> AA, 27 -> AB
+    """
+    if col_index < 0:
+        raise ValueError("Excel列索引号为非负整数")
 
-    if 0 < col_index <= 26:
-        return chr(col_index + 64)
-    else:
-        quotient = math.floor(col_index / 26)
-        remainder = col_index % 26
-        if remainder == 0:
-            return get_excel_col_name_by_index(quotient - 1) + "Z"
-        else:
-            return get_excel_col_name_by_index(quotient) + chr(remainder + 64)
+    # 转换为从1开始的索引进行计算
+    n = col_index + 1
+    result = []
+    while n > 0:
+        n -= 1
+        result.append(chr(n % 26 + ord('A')))
+        n = n // 26
+    return ''.join(reversed(result))
