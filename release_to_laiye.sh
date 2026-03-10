@@ -60,10 +60,18 @@ $TWINE check dist/*
 # 恢复 dbox/__init__.py 文件
 git checkout dbox/__init__.py
 
-echo "打包成功，需要发布到 [LaiYe 源]。按 Enter 键继续发布..."
+echo "打包成功。"
+echo "按 Enter 键先发布到 PyPI（https://pypi.org），如不需要可直接 Ctrl+C 退出。"
 read -r
 
-# 发布到 laiye 源
+# 先发布到 PyPI 官方源
+$TWINE upload dist/*
+echo "已发布到 PyPI。"
+
+echo "按 Enter 键继续发布到 [LaiYe 源]..."
+read -r
+
+# 再发布到 laiye 源
 $TWINE upload -r laiye dist/*
-echo "发布成功！"
+echo "已发布到 [LaiYe 源]。"
 read -r -p "按 Enter 键退出"
