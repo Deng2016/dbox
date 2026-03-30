@@ -16,6 +16,46 @@ from .addressinfo import addr
 from .bankinfo import bank_bin_list
 
 
+def get_date(offset: int | None = None) -> str:
+    """获取日期
+    :param offset: 偏移天数，正数往未来，负数往过去，默认为空返回当天
+    :return: 日期字符串，格式为"%Y-%m-%d"
+    """
+    today = datetime.date.today()
+    if offset:
+        today = today + datetime.timedelta(days=offset)
+    return today.strftime("%Y-%m-%d")
+
+
+def get_datetime(offset: int | None = None) -> str:
+    """获取日期时间
+    :param offset: 偏移秒数，正数往未来，负数往过去，默认为空返回当前时刻
+    :return: 日期时间字符串，格式为"%Y-%m-%d %H:%M:%S"
+    """
+    now = datetime.datetime.now()
+    if offset:
+        now = now + datetime.timedelta(seconds=offset)
+    return now.strftime("%Y-%m-%d %H:%M:%S")
+
+
+def get_timestamp(offset: int | None = None, length: int = 10) -> int:
+    """获取Unix时间戳
+    :param offset: 偏移秒数，正数往未来，负数往过去，默认为空返回当前时间戳
+    :param length: 时间戳位数，10为秒级，13为毫秒级，默认为10
+    :return: Unix时间戳
+    """
+    if length not in (10, 13):
+        raise ValueError("length参数仅支持10（秒级）或13（毫秒级）")
+    now = datetime.datetime.now()
+    if offset:
+        now = now + datetime.timedelta(seconds=offset)
+    timestamp = now.timestamp()
+    if length == 10:
+        return int(timestamp)
+    else:
+        return int(timestamp * 1000)
+
+
 def get_random_date(
     start_date: datetime.date | datetime.datetime | str = "",
     end_date: datetime.date | datetime.datetime | str = "",
@@ -25,7 +65,7 @@ def get_random_date(
     随机生成日期
     :param start_date: 起始日期，格式为"%Y-%m-%d"
     :param end_date: 截止日期，格式为"%Y-%m-%d"
-    :param date_format: 输出格式，默认为"%Y%m%d"
+    :param date_format: 输出格式，默认为"%Y-%m-%d"
     :return: 随机日期，格式为date_format
     """
     if not start_date:
@@ -51,8 +91,9 @@ def get_random_date(
 
 def get_random_string(length: int = 32, source: str = "dlu") -> str:
     """获取随机字符串
-    :param length: int, 返回字符数量
-    :param source: str, d代表数字，l代表26个小写字母，u代表26个大写字母，s代表所有
+    :param length: 返回字符数量
+    :param source: 字符源，d数字，l小写字母，u大写字母，s所有可打印字符，默认为dlu
+    :return: 随机生成的字符串
     """
     char_pool = ""
     # s 包含所有字符，故直接重新赋值
@@ -74,6 +115,10 @@ def get_random_string(length: int = 32, source: str = "dlu") -> str:
 
 
 def get_uuid(length: int = 32) -> str:
+    """生成UUID字符串
+    :param length: UUID长度，默认32位（无连字符）；36位为带连字符的标准格式；小于32则截断；大于32则重复拼接
+    :return: UUID字符串
+    """
     if length <= 0:
         return ""
 
@@ -108,8 +153,11 @@ def get_pinyin(name: str = "", separator="") -> tuple[str, str]:
     return pinyin_result, name
 
 
-def get_name(gender: int = 0):
-    """获取中国人惯用姓名"""
+def get_name(gender: int = 0) -> str:
+    """获取随机中国人姓名
+    :param gender: 性别，0为随机，偶数为女性，奇数为男性
+    :return: 随机生成的姓名
+    """
     surnames = """
         赵钱孙李，周吴郑王。
         冯陈褚卫，蒋沈韩杨。
@@ -193,12 +241,10 @@ def get_name(gender: int = 0):
     return f"{selected_surname}{selected_given_name}"
 
 
-def validate_id_card(id_card_number):
-    """函数功能：
-    校验模式：1. 校验中国大陆身份证号码的第18位是否正确；
-    计算模式：2. 传入前17位，计算第18位校验码返回；
-    返回为空时代码校验不通过；
-    返回有值时代码校验通过，或是计算模式；
+def validate_id_card(id_card_number: str | int) -> str | bool:
+    """校验或计算中国大陆身份证号码的校验码
+    :param id_card_number: 身份证号码，18位时校验最后一位，17位时计算校验码
+    :return: 18位完整身份证校验通过返回原校验码；17位身份证返回计算的校验码；校验失败返回空字符串或False
     """
     existing_check_code = ""
     # 统一转换成字符串类型
@@ -241,8 +287,11 @@ def validate_id_card(id_card_number):
         return ""
 
 
-def generate_id_card(gender=0):
-    """获取中国大陆18位身份证号码"""
+def generate_id_card(gender: int = 0) -> str:
+    """生成随机中国大陆18位身份证号码
+    :param gender: 性别，0为随机，奇数为男性，偶数为女性
+    :return: 18位身份证号码字符串
+    """
     # part1: 随机获取地区编码
     region_code = random.choice(addr)[0]
 
@@ -267,8 +316,10 @@ def generate_id_card(gender=0):
     return f"{region_code}{birth_date}{sequence_number}{gender_code}{validation_code}"
 
 
-def generate_mobile_number():
-    """生成随机手机号码"""
+def generate_mobile_number() -> str:
+    """生成随机手机号码
+    :return: 11位手机号码字符串，基于国内常见号段生成
+    """
     phone_prefixes = [
         130,
         131,
@@ -305,8 +356,10 @@ def generate_mobile_number():
     return phone_number
 
 
-def generate_phone_serial_number():
-    """生成手机串号"""
+def generate_phone_serial_number() -> str:
+    """生成手机串号（IMEI格式）
+    :return: 形如XXXX-XXXX-XXXXX的串号字符串
+    """
     serial_number = "".join(random.choices(string.ascii_uppercase, k=4))
     serial_number += "-" + "".join(random.choices(string.ascii_uppercase, k=4))
     serial_number += "-" + "".join(random.choices(string.digits, k=5))
@@ -336,7 +389,11 @@ def generate_bank_card_number(card_count=1, bank_code=None, bank_name=None, card
         return bin_list
 
 
-def __generate_bank_number(bin_obj):
+def __generate_bank_number(bin_obj: dict) -> dict:
+    """根据银行卡BIN信息生成完整卡号（内部函数）
+    :param bin_obj: 包含bin码和长度的字典，会在对象中添加生成的卡号no字段
+    :return: 添加了卡号no字段的bin_obj对象
+    """
     if not bin_obj["bin"].isdigit():
         raise ValueError("银行卡BIN应该为6位数字")
 
@@ -386,7 +443,9 @@ def get_bank_bin(
     ftype: str | None = None,
     length: str | None = None,
 ):
-    """获取银行卡bin码"""
+    """获取银行卡bin码
+    :return: 符合条件的BIN信息列表，当num大于0时返回指定数量的随机选择
+    """
     if length:
         length = str(length)
     bin_list = []
@@ -411,6 +470,10 @@ def get_bank_bin(
         return random.choices(bin_list, k=num)
 
 
-def get_special_character(character_count: int):
+def get_special_character(character_count: int) -> str:
+    """生成包含特殊字符的随机字符串
+    :param character_count: 需要生成的特殊字符数量
+    :return: 由特殊字符组成的字符串
+    """
     special_chars = r'''①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂⒃⒄⒅⒆⒇⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛㊀㊁㊂㊃㊄㊅㊆㊇㊈㊉㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩№½⅓⅔¼¾⅛⅜⅝⅞+-×÷﹢﹣±/=∥∠≌∽≦≧≒﹤﹥≈≡≠=≤≥<>≮≯∷∶∫∮∝∞∧∨∑∏∪∩∈∵∴⊥∥∠⌒⊙√∟⊿㏒㏑%‰ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζνξοπρσηθικλμτυφχψω㋀㋁㋂㋃㋄㋅㋆㋇㋈㋉㋊㋋㏠㏡㏢㏣㏤㏥㏦㏧㏨㏩㏪㏫㏬㏭㏮㏯㏰㏱㏲㏳㏴㏵㏶㏷㏸㏹㏺㏻㏼㏽㏾㍘㍙㍚㍛㍜㍝㍞㍟㍠㍡㍢㍣㍤㍥㍦㍧㍨㍩㍪㍫㍬㍭㍯㍰㊐㊊㊎㊍㊌㊋㊏㊑㊒㊓㊔㊕㊖㊗㊘㊜㊝㊞㊟㊠㊡㊢㊩㊪㊫㊬㊭㊮㊯㊰㊙㊚㊛㊣㊤㊥㊦㊧㊨囍㈱㍿卐卍ォミ灬彡ツ♩♪♫♬¶♭♯♮∮‖§Ψ⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ零壹贰叁伍陆柒捌玖佰仟万亿☀☼♨☁☂☽☾❄❅❆☃©®℃℉♂♀㎡℗Ω㏎￼㎎㎏㎜㎝㎞㎡㏄㏎㏑㏒㏕℡%‰°′″￠℅￥$€￡₴$₰¢₤₳₲₪₵₣₱฿¤₡₮₭₩ރ₢₥₫₦zł﷼₠₧₯₨Kčर₹ƒ₸￠┏┳┓┌┬┐╔╦╗╓╥╖╒╤╕╭╮╱╲─│┱┲╃╄┣╋┫├┼┤╠╬╣╟╫╢╞╪╡╰╯╲╱━┇┅┋┗┻┛└┴┘╚╩╝╙╨╜╘╧╛═║︴﹏﹋﹌✱✲✳❃✾✽✼✻✺✹✸✷✶✵✴❄❅❆❇❈❉❊❋✱❤♡♥❥♠♣♤ღ❣★☆✡✦✧✩✪✫✬✭✮✯✰☑✓✔√☓☒✘ㄨ✕✖✗❏❐❑❒▏▐░▒▓▔▕■□▢▣▤▥▦▧▨▩▪▫▬▭▮▯ˍ∎⊞⊟⊠⊡⋄▱◆◇◈◧◨◩◪◫◙◘▀▁▂▃▄▅▆▇▉▊▋█▌▍▎▰⊙●○◕¤☪❂✪☻☼Θ⊖⊘⊕⊚⊛⊜⊝◉◌◍◐◑◒◓◔⊗◖◗◯◤◥◄►▶◀◣◢▲▼▸◂▴▾△▽▷◁⊿▻◅▵▿▹◃∆◬◭◮∇☢乾☰兑☱离☲震☳巽☴坎☵艮☶坤☷☯。，、：∶；''""〝〞ˆˇ﹕︰﹔﹖﹑·¨.¸;´？！～—｜‖＂〃｀@﹫¡¿﹏﹋︴々﹟#﹩$﹠&﹪%﹡﹢×﹦‐￣¯―﹨˜﹍﹎＿-~（）〈〉‹›﹛﹜『』〖〗［］《》〔〕}」【】︵︷︿︹︽_︶︸﹀︺︾ˉ﹂﹄︼﹁﹃︻▲●□…→āáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜüêɑńňǹɡㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄧㄨㄩぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖ゚゛゜ゝゞゟ゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーヽヾヿ㍿ㄱㄲㄳㄴㄵㄶㄷㄸㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅃㅄㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅥㅦㅧㅨㅩㅪㅫㅬㅭㅮㅯㅰㅱㅲㅳㅴㅵㅶㅷㅸㅹㅺㅻㅼㅽㅾㅿㆀㆁㆂㆃㆄㆅㆆㆇㆈㆉㆊАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя←↑→↓↙↘↖↗↰↱↲↳↴↵↶↺↻↷➝⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛↯↹↔↕⇦⇧⇨⇩➫➬➩➪➭➮➯➱⏎➜➡➥➦➧➨➷➸➻➼➽➸➹➳➤➟➲➢➣➞⇪➚➘➙➛➺⇞⇟⇠⇡⇢⇣⇤⇥↜↝♐➴➵➶↼↽↾↿⇀⇁⇂⇃↞↟↠↡↢↣↤↪↫↬↭↮↯↩⇜⇝↸↚↛↥↦↧↨✐✎✏✑✒✍✉✁✂✃✄✆✉☎☏☢☠☣✈☜☞☝✍☚☟✌♤♧♡♢♠♣♥♦☀☁☂❄☃♨웃유❖☽☾☪✿♂♀✪✯☭➳卍卐√×■◆●○◐◑✙☺☻❀⚘♔♕♖♗♘♙♚♛♜♝♞♟♧♡♂♀♠♣♥❤⊙◎☺☻☼▧▨♨◐◑↔↕▪▒◊◦▣▤▥▦▩◘◈◇♬♪♩♭♪の★☆→あぃ￡Ю〓§♤♥▶¤✲❈✿✲❈➹☀☂☁【】┱┲❣✚✪✣✤✥✦❉❥❦❧❃❂❁❀✄☪☣☢☠☪♈ºº₪¤큐«»™♂✿♥☺☻｡◕‿◕｡｡◕‿◕｡◕‿-｡◉◞◟◉⊙‿⊙⊙▂⊙⊙０⊙⊙︿⊙⊙ω⊙⊙﹏⊙⊙△⊙⊙▽⊙∩▂∩∩０∩∩︿∩∩ω∩∩﹏∩∩△∩∩▽∩●▂●●０●●︿●●ω●●﹏●●△●●▽●∪▂∪∪０∪∪︿∪∪ω∪∪﹏∪∪△∪∪▽∪≧▂≦≧０≦≧︿≦≧ω≦≧﹏≦≧△≦≧▽≦＞▂＜＞０＜＞︿＜＞ω＜＞﹏＜＞△＜＞▽＜╯▂╰╯０╰╯︿╰╯ω╰╯﹏╰╯△╰╯▽╰＋▂＋＋０＋＋︿＋＋ω＋﹏＋＋△＋＋▽＋ˋ▂ˊˋ０ˊˋ︿ˊˋωˊˋ﹏ˊˋ△ˊˋ▽ˊˇ▂ˇˇ０ˇˇ︿ˇˇωˇˇ﹏ˇˇ△ˇˇ▽ˇ˙▂˙˙０˙˙︿˙˙ω˙˙﹏˙˙△˙˙▽˙≡(▔﹏▔)≡⊙﹏⊙∥∣°ˋ︿ˊ﹀-#╯︿╰﹀(=‵′=)<(‵^′)>(ˉ▽ˉ；)(-__-)b＼＿／￣□￣｜｜------\(˙<>˙)/------<("""O""">(‵▽′)ψ（°ο°）~@?(^人)?(＊?↓˙＊)(O^~^O)[>\/<]↓。υ。↓(；°○°)(>c<)艹丶灬丨彡丿丬巛o氵刂卩s宀卩刂阝肀忄冫丿氵彡丬丨丩丬丶丷丿乀乁乂乄乆乛亅亠亻冂冫冖凵刂辶釒钅阝飠牜饣卩卪厸厶厽孓宀巛巜彳廴彡彐彳忄扌攵氵灬爫犭疒癶礻糹纟罒罓耂艹訁覀兦亼亽亖亗吂凸凹卝卍卐匸皕旡玊尐幵'''
     return "".join(random.choices(special_chars, k=character_count))

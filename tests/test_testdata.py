@@ -2,6 +2,9 @@ import pytest
 import datetime
 from unittest.mock import patch
 from dbox.testdata import (
+    get_date,
+    get_datetime,
+    get_timestamp,
     get_random_date,
     get_random_string,
     get_uuid,
@@ -19,6 +22,75 @@ from dbox.testdata import (
 
 class TestTestData:
     """测试测试数据生成函数"""
+
+    def test_get_date_default(self):
+        """测试获取当前日期"""
+        result = get_date()
+        assert isinstance(result, str)
+        assert len(result) == 10
+        assert result.count("-") == 2
+
+    def test_get_date_with_offset_positive(self):
+        """测试获取偏移日期-未来"""
+        result = get_date(10)
+        assert isinstance(result, str)
+        today = datetime.date.today()
+        expected = (today + datetime.timedelta(days=10)).strftime("%Y-%m-%d")
+        assert result == expected
+
+    def test_get_date_with_offset_negative(self):
+        """测试获取偏移日期-过去"""
+        result = get_date(-10)
+        assert isinstance(result, str)
+        today = datetime.date.today()
+        expected = (today + datetime.timedelta(days=-10)).strftime("%Y-%m-%d")
+        assert result == expected
+
+    def test_get_datetime_default(self):
+        """测试获取当前日期时间"""
+        result = get_datetime()
+        assert isinstance(result, str)
+        assert len(result) == 19
+        assert result.count("-") == 2
+        assert result.count(":") == 2
+
+    def test_get_datetime_with_offset_positive(self):
+        """测试获取偏移日期时间-未来"""
+        result = get_datetime(3600)
+        assert isinstance(result, str)
+        now = datetime.datetime.now()
+        expected = (now + datetime.timedelta(seconds=3600)).strftime("%Y-%m-%d %H:%M:%S")
+        assert result == expected
+
+    def test_get_datetime_with_offset_negative(self):
+        """测试获取偏移日期时间-过去"""
+        result = get_datetime(-3600)
+        assert isinstance(result, str)
+        now = datetime.datetime.now()
+        expected = (now + datetime.timedelta(seconds=-3600)).strftime("%Y-%m-%d %H:%M:%S")
+        assert result == expected
+
+    def test_get_timestamp_10_digits(self):
+        """测试获取10位时间戳（秒级）"""
+        result = get_timestamp()
+        assert isinstance(result, int)
+        assert len(str(result)) == 10
+
+    def test_get_timestamp_13_digits(self):
+        """测试获取13位时间戳（毫秒级）"""
+        result = get_timestamp(length=13)
+        assert isinstance(result, int)
+        assert len(str(result)) == 13
+
+    def test_get_timestamp_with_offset(self):
+        """测试获取偏移时间戳"""
+        result = get_timestamp(offset=3600)
+        assert isinstance(result, int)
+
+    def test_get_timestamp_invalid_length(self):
+        """测试无效时间戳长度"""
+        with pytest.raises(ValueError, match="length参数仅支持10"):
+            get_timestamp(length=12)
 
     def test_get_random_date_default(self):
         """测试默认随机日期生成"""
@@ -156,16 +228,39 @@ class TestTestData:
         assert len(result) == 18
 
     def test_validate_id_card_valid(self):
-        """测试验证有效的身份证号"""
-        # 测试一个有效的身份证号
-        valid_id = "110101199003070319"
-        # 注：这个身份证号是示例，validate_id_card函数可能返回True或False
-        # 我们不做具体断言，只验证函数能正常运行
-        try:
-            result = validate_id_card(valid_id)
-            # 只要函数不抛异常就算通过
-        except Exception:
-            pytest.fail("validate_id_card should not raise exception")
+        """测试验证有效的身份证号-18位"""
+        # 使用 generate_id_card 生成有效身份证进行测试
+        valid_id = generate_id_card()
+        result = validate_id_card(valid_id)
+        assert result == valid_id[-1]
+
+    def test_validate_id_card_calculate_from_17_digits(self):
+        """测试从17位计算校验码"""
+        # 生成有效身份证，截取前17位进行计算
+        valid_id = generate_id_card()
+        id_17 = valid_id[:17]
+        result = validate_id_card(id_17)
+        assert isinstance(result, str)
+        assert len(result) == 1
+        assert result == valid_id[-1]
+
+    def test_validate_id_card_invalid_length(self):
+        """测试无效身份证号长度"""
+        result = validate_id_card("12345")
+        assert result is False
+
+    def test_validate_id_card_invalid_characters(self):
+        """测试包含无效字符的身份证号（前17位包含字母）"""
+        result = validate_id_card("11010119900307A31X")
+        assert result is False
+
+    def test_validate_id_card_invalid_check_code(self):
+        """测试无效校验码"""
+        # 生成有效身份证，修改最后一位为错误值
+        valid_id = generate_id_card()
+        wrong_id = valid_id[:-1] + ("0" if valid_id[-1] != "0" else "1")
+        result = validate_id_card(wrong_id)
+        assert result == ""
 
     def test_generate_mobile_number(self):
         """测试获取手机号"""

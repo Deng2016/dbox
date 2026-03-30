@@ -4,8 +4,8 @@ import logging.handlers
 from pathlib import Path
 
 
-__version__ = "2026.3.10.1"
-__commit_id__ = "{{COMMIT_ID}}"
+__version__ = "2026.3.30.1"
+__commit_id__ = "695f0eb"
 log_format = logging.Formatter(
     "[%(asctime)s] %(threadName)s/%(name)s/%(filename)s/%(lineno)s/%(funcName)s/%(levelname)s: %(message)s"
 )
