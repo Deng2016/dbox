@@ -1,4 +1,3 @@
-import os
 import re
 import json
 import time
@@ -6,7 +5,9 @@ import logging
 from pathlib import Path
 from datetime import datetime, timedelta
 
-from . import logger, file as file_utils
+from . import file as file_utils
+
+logger = logging.getLogger(__name__)
 
 
 def get_engine_version_info(deputy_abs_path: Path) -> dict:

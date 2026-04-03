@@ -17,7 +17,7 @@ from decimal import Decimal
 from functools import wraps
 
 
-logger = logging.getLogger("DBox")
+logger = logging.getLogger(__name__)
 
 
 class ExecuteCMDException(Exception):

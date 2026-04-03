@@ -8,12 +8,14 @@ time：2020-06-28
 import os
 import sys
 import json
+import logging
 import sqlite3
 from pathlib import Path
 from redis import Redis, ConnectionPool
 
-from . import logger
 from .utils import byte_to_str, get_caller_info
+
+logger = logging.getLogger(__name__)
 from .encrypt import to_decode, sum_md5
 from .file import read_file_content, save_json_to_file
 

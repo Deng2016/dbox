@@ -21,11 +21,9 @@ except ImportError:
 
 from pymysql.connections import Connection
 from pymysql.cursors import DictCursor
-from . import logger, configure_logger
 from . import my_http as http_utils
 
-
-configure_logger(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def get_connection(

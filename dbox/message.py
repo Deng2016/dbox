@@ -5,7 +5,7 @@ import logging
 import requests
 
 
-logger = logging.getLogger("DBox")
+logger = logging.getLogger(__name__)
 
 
 def send_wechat_message(message: dict, receiver: str):

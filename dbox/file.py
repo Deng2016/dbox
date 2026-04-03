@@ -13,7 +13,7 @@ import configparser
 from pathlib import Path
 
 
-logger = logging.getLogger("DBox")
+logger = logging.getLogger(__name__)
 
 
 def check_path_is_exits(src_path: str | Path, path_type=None):

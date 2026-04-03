@@ -1,12 +1,14 @@
 import os
 import json
+import logging
 import requests
 from urllib.parse import urlparse, unquote
 from requests.cookies import RequestsCookieJar
 from requests.structures import CaseInsensitiveDict
 
-from . import logger
 from .utils import get_caller_info, MyJSONEncoder
+
+logger = logging.getLogger(__name__)
 
 
 def parser_cookies_by_headers(headers: CaseInsensitiveDict):
