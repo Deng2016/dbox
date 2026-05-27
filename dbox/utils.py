@@ -296,7 +296,7 @@ def get_caller_info(depth: int) -> dict[str, str]:
     _func_name = from_obj.function
 
     _func_desc = from_obj.frame.f_code.co_consts[0]
-    if _func_desc:
+    if isinstance(_func_desc, str):
         _func_desc = _func_desc.split("\n")[0].strip()
     else:
         _func_desc = ""
@@ -316,7 +316,7 @@ def get_caller_desc(depth: int) -> str:
     """
     try:
         doc_str = inspect.stack()[depth].frame.f_code.co_consts[0]
-        if doc_str:
+        if isinstance(doc_str, str):
             doc_str = doc_str.split("\n")[0].strip()
         else:
             doc_str = inspect.stack()[depth].frame.f_code.co_name
