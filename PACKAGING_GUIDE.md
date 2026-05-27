@@ -6,16 +6,13 @@
 
 ## 配置文件
 
-### 1. setup.py
-- 使用 `find_packages(exclude=["tests", "tests.*"])` 排除测试包
-- 在 `exclude_package_data` 中排除不必要的文件
+### 1. pyproject.toml
+- 使用 `[project]` 表定义项目元数据和依赖
+- 使用 `[build-system]` 指定 hatchling 作为构建后端
+- 通过 `[tool.hatch.build]` 控制打包包含的文件
+- 版本号从 `dbox/__init__.py` 自动读取
 
-### 2. MANIFEST.in
-- 明确指定包含和排除的文件
-- 使用 `global-exclude` 排除整个目录
-- 使用 `exclude` 排除特定文件
-
-### 3. .gitignore
+### 2. .gitignore
 - 排除开发工具和临时文件
 - 排除构建产物
 
@@ -26,7 +23,6 @@
 - [ ] `README.md`
 - [ ] `LICENSE`
 - [ ] `pyproject.toml`
-- [ ] `setup.py`
 
 ### ❌ 确保排除的文件和目录
 - [ ] `tests/` 目录
@@ -49,15 +45,31 @@
 
 ## 打包命令
 
+### 使用 uv (推荐)
 ```bash
 # 清理之前的构建文件
-rmdir /s /q build dist dbox.egg-info
+rm -rf build dist dbox.egg-info
 
-# 创建源码分发包
-python setup.py sdist
+# 构建源码和 wheel 分发包
+uv build
 
-# 创建轮子包
-python setup.py bdist_wheel
+# 发布到 PyPI
+uv publish
+
+# 发布到指定仓库
+uv publish --publish-url <仓库地址> --username <用户名> --password <密码>
+```
+
+### 使用 pip + build
+```bash
+# 清理之前的构建文件
+rm -rf build dist dbox.egg-info
+
+# 创建源码和 wheel 分发包
+python -m build
+
+# 发布到 PyPI
+python -m twine upload dist/*
 ```
 
 ## 验证打包结果
@@ -70,17 +82,17 @@ python setup.py bdist_wheel
 ## 常见问题
 
 ### Q: tests 目录仍然被包含
-A: 确保在 setup.py 中使用 `exclude=["tests", "tests.*"]`，并删除 tests 目录中的 `__init__.py` 文件
+A: 确保在 pyproject.toml 中 `[tool.hatch.build.targets.wheel]` 的 `packages` 只包含 `["dbox"]`
 
-### Q: 构建文件被包含
-A: 在 MANIFEST.in 中使用 `global-exclude` 排除整个目录
+### Q: 版本号不对
+A: 版本号从 `dbox/__init__.py` 中的 `__version__` 读取，修改后重新构建
 
-### Q: 临时文件被包含
-A: 在 .gitignore 中正确配置，并在 MANIFEST.in 中明确排除
+### Q: uv publish 需要手动输入账号
+A: 在 `~/.pypirc` 中配置好凭证，发布脚本 `release_to_laiye.sh` 会自动读取
 
 ## 最佳实践
 
 1. **定期清理**: 打包前清理构建目录
 2. **测试验证**: 解压生成的包验证内容
 3. **版本管理**: 确保版本号正确
-4. **依赖管理**: 确保 install_requires 完整且准确 
+4. **依赖管理**: 确保 `[project.dependencies]` 完整且准确 

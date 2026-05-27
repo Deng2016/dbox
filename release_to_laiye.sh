@@ -13,6 +13,13 @@ get_pypirc_value() {
         | sed 's/^[^=]*=[[:space:]]*//; s/[[:space:]]*$//; s/\r//'
 }
 
+# 检查是否有未提交的修改或未跟踪的文件
+if [ -n "$(git status --porcelain)" ]; then
+    echo "❌ 错误：当前存在未提交的修改或未跟踪的文件，请先提交所有变更后再发布！"
+    git status --short
+    exit 1
+fi
+
 # 获取 git commit short ID
 commit_id=$(git rev-parse --short HEAD)
 echo "当前 commit ID: $commit_id"

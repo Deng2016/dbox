@@ -97,10 +97,22 @@ cd dbox
 pip install -e .
 ```
 
+## 🦀 使用 uv (推荐)
+
+本项目推荐使用 [uv](https://docs.astral.sh/uv/) 进行依赖管理，速度更快且功能更强。
+
+```bash
+# 创建虚拟环境并安装所有依赖（包括测试依赖）
+uv sync --group test
+
+# 运行测试
+uv run pytest
+```
+
 ## 🔧 环境要求
 
 - Python 3.12+
-- 依赖包：
+- 依赖包：详见 `pyproject.toml` 中的 `[project.dependencies]`
 
 ## 🛠️ 开发环境设置
 
@@ -131,30 +143,36 @@ pip install -e .
 4. 设置代码风格为 Black（120 字符行长度）
 
 ### 虚拟环境设置
+
+#### 使用 uv (推荐)
+```bash
+# 创建虚拟环境并安装依赖
+uv sync --group test
+
+# 单独安装项目依赖
+uv sync
+
+# 安装测试依赖
+uv sync --group test
+```
+
+#### 使用 pip
 ```bash
 # 确保使用 Python 3.12 或更高版本
 python --version  # 应该显示 Python 3.12.x 或更高版本
 
 # 创建虚拟环境
-python -m venv venv
+python -m venv .venv
 
 # 激活虚拟环境
 # Windows
-venv\Scripts\activate
+.venv\Scripts\activate
 # Linux/Mac
-source venv/bin/activate
+source .venv/bin/activate
 
 # 安装依赖
-pip install -r requirements-test.txt
 pip install -e .
 ```
-  - requests ~= 2.32.4
-  - redis ~= 6.2.0
-  - pycryptodome ~= 3.23.0
-  - xpinyin ~= 0.7.7
-  - pysmb ~= 1.2.11
-  - pyjwt ~= 2.10.1
-  - pytz ~= 2025.2
 
 ## 📖 使用示例
 

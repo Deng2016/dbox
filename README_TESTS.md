@@ -37,25 +37,40 @@ chmod +x run_tests.sh
 ./run_tests.sh
 ```
 
-### 手动运行
+### 使用 uv (推荐)
+
+```bash
+# 安装所有依赖（包括测试依赖）
+uv sync --group test
+
+# 运行所有测试
+uv run pytest tests/ -v
+
+# 运行带覆盖率报告的测试
+uv run pytest tests/ -v --cov=dbox --cov-report=html --cov-report=term-missing
+
+# 运行特定测试文件
+uv run pytest tests/test_utils.py -v
+
+# 运行特定测试类
+uv run pytest tests/test_utils.py::TestUtils -v
+
+# 运行特定测试方法
+uv run pytest tests/test_utils.py::TestUtils::test_pop_key_from_dict -v
+```
+
+### 使用 pip
+
 ```bash
 # 安装测试依赖
-pip install -r requirements-test.txt
+pip install -e .
+pip install pytest pytest-cov pytest-mock pytest-xdist coverage
 
 # 运行所有测试
 python -m pytest tests/ -v
 
 # 运行带覆盖率报告的测试
 python -m pytest tests/ -v --cov=dbox --cov-report=html --cov-report=term-missing
-
-# 运行特定测试文件
-python -m pytest tests/test_utils.py -v
-
-# 运行特定测试类
-python -m pytest tests/test_utils.py::TestUtils -v
-
-# 运行特定测试方法
-python -m pytest tests/test_utils.py::TestUtils::test_pop_key_from_dict -v
 ```
 
 ## 测试覆盖范围
@@ -195,19 +210,18 @@ python -m pytest tests/test_utils.py::TestUtils::test_pop_key_from_dict -v
 
 ## 测试配置
 
-### pytest.ini
+### pytest.ini → pyproject.toml
+- 测试配置已移至 pyproject.toml 的 `[tool.pytest.ini_options]`
 - 配置测试路径和文件模式
-- 设置测试标记
-- 配置覆盖率报告
 
 ### conftest.py
 - 定义通用测试fixtures
 - 配置测试环境
 - 提供模拟对象
 
-### requirements-test.txt
-- 测试依赖包列表
-- 确保测试环境的一致性
+### pyproject.toml ([dependency-groups.test])
+- 测试依赖包列表，定义在 `[dependency-groups.test]` 中
+- 使用 `uv sync --group test` 安装
 
 ## 覆盖率报告
 
