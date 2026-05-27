@@ -1,7 +1,7 @@
 import time
 import math
-import pytz
 import datetime
+from zoneinfo import ZoneInfo
 
 
 def get_timestamp(length: int = 10, utc=False) -> int:
@@ -57,8 +57,8 @@ def timestamp_to_str(timestamp: int, fmt="%Y-%m-%d %H:%M:%S", tz: str = "Asia/Sh
     else:
         raise ValueError(f"时间戳格式错误：{timestamp}")
 
-    utc_time = datetime.datetime.fromtimestamp(time_int, tz=pytz.UTC)
-    target_time = utc_time.astimezone(pytz.timezone(tz))
+    utc_time = datetime.datetime.fromtimestamp(time_int, tz=datetime.UTC)
+    target_time = utc_time.astimezone(ZoneInfo(tz))
     return target_time.strftime(fmt)
 
 
