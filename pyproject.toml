@@ -1,4 +1,80 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dbox"
+dynamic = ["version"]
+description = "Personal method encapsulation"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [
+    {name = "dqy", email = "yu12377@163.com"},
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: Implementation",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "requests~=2.33.0",
+    "redis~=7.3.0",
+    "pycryptodome~=3.23.0",
+    "xpinyin~=0.7.7",
+    "pysmb~=1.2.13",
+    "pyjwt~=2.12.0",
+    "pytz~=2026.1.post1",
+]
+
+[project.urls]
+Homepage = "https://github.com/Deng2016/dbox"
+
+[tool.hatch.version]
+path = "dbox/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["dbox"]
+
+[tool.hatch.build]
+include = [
+    "dbox/**",
+    "LICENSE",
+]
+
+[dependency-groups]
+test = [
+    "pytest>=9.0.3",
+    "pytest-cov>=7.0.0",
+    "pytest-mock>=3.15.1",
+    "pytest-xdist>=3.8.0",
+    "coverage>=7.13.4",
+]
+
 [tool.black]
 line-length = 120
 target-version = ['py312', 'py313', 'py314']
 skip-string-normalization = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--verbose",
+    "--tb=short",
+    "--strict-markers",
+    "--disable-warnings",
+    "--cov=dbox",
+    "--cov-report=html",
+    "--cov-report=term-missing",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]

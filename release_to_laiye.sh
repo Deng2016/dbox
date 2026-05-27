@@ -1,11 +1,17 @@
 #!/bin/bash
 
-# 检查是否有未提交的修改或未跟踪的文件
-# if [ -n "$(git status --porcelain)" ]; then
-#     echo "❌ 错误：当前存在未提交的修改或未跟踪的文件，请先提交所有变更后再发布！"
-#     git status --short
-#     exit 1
-# fi
+# 从 .pypirc 中读取指定 section 的配置值
+get_pypirc_value() {
+    local section="$1"
+    local key="$2"
+    local file="$HOME/.pypirc"
+    [ ! -f "$file" ] && return 1
+    # 找到 [section] 到下一个 [ 之间的区域，提取 key=value
+    sed -n "/^\[$section\]/,/^\[/p" "$file" \
+        | grep -i "^[[:space:]]*$key[[:space:]]*=" \
+        | head -1 \
+        | sed 's/^[^=]*=[[:space:]]*//; s/[[:space:]]*$//; s/\r//'
+}
 
 # 获取 git commit short ID
 commit_id=$(git rev-parse --short HEAD)
@@ -14,48 +20,27 @@ echo "当前 commit ID: $commit_id"
 # 替换 dbox/__init__.py 中的 __commit_id__ 占位符
 sed -i "s/__commit_id__ = \".*\"/__commit_id__ = \"$commit_id\"/" dbox/__init__.py
 
-# 统一使用项目根目录下的 .venv 虚拟环境，不使用宿主机物理环境
+# 统一使用项目根目录下的 .venv 虚拟环境
 PROJECT_VENV=".venv"
-if [ ! -x "$PROJECT_VENV/bin/python" ]; then
+if [ ! -f "$PROJECT_VENV/bin/uv" ] && [ ! -x "$PROJECT_VENV/bin/python" ]; then
     echo "❌ 未找到项目虚拟环境：$PROJECT_VENV"
-    echo "请先在项目根目录执行：python3 -m venv .venv && source .venv/bin/activate && pip install -U build twine"
+    echo "请先在项目根目录执行：uv venv && uv sync"
     exit 1
 fi
 
-PYTHON="$PROJECT_VENV/bin/python"
 echo "Using project virtualenv: $PROJECT_VENV"
 
-# 确认虚拟环境中已安装 pip
-if ! "$PYTHON" -m pip --version >/dev/null 2>&1; then
-    echo "❌ 虚拟环境中未找到 pip。"
-    echo "请重新创建虚拟环境并安装依赖，例如："
-    echo "  rm -rf .venv"
-    echo "  python3 -m venv .venv"
-    echo "  source .venv/bin/activate"
-    echo "  pip install -U pip build twine"
-    exit 1
-fi
-
-PIP="$PYTHON -m pip"
-TWINE="$PYTHON -m twine"
-
 # 显示版本信息
-$PYTHON --version
-$PIP --version
+$PROJECT_VENV/bin/python --version
+uv --version
 
 # 清理之前的构建文件
 rm -rf build dist dbox.egg-info
 echo "已清理之前的构建记录，按 Enter 键继续打包..."
 read -r
 
-# 安装/升级打包工具（在项目虚拟环境中执行）
-$PIP install --upgrade build twine
-
-# 构建源码和 wheel 分发包
-$PYTHON -m build
-
-# 检查分发包
-$TWINE check dist/*
+# 使用 uv 构建分发包
+uv build
 
 # 恢复 dbox/__init__.py 文件
 git checkout dbox/__init__.py
@@ -64,14 +49,35 @@ echo "打包成功。"
 echo "按 Enter 键先发布到 PyPI（https://pypi.org），如不需要可直接 Ctrl+C 退出。"
 read -r
 
-# 先发布到 PyPI 官方源
-$TWINE upload dist/*
-echo "已发布到 PyPI。"
+# 从 .pypirc 读取 PyPI 凭证
+PYPI_USERNAME=$(get_pypirc_value "pypi" "username")
+PYPI_PASSWORD=$(get_pypirc_value "pypi" "password")
+
+if [ "$PYPI_USERNAME" = "__token__" ]; then
+    uv publish --token "$PYPI_PASSWORD"
+else
+    uv publish --username "$PYPI_USERNAME" --password "$PYPI_PASSWORD"
+fi
+if [ $? -ne 0 ]; then
+    echo "❌ 发布到 PyPI 失败，终止发布流程。"
+    read -r -p "按 Enter 键退出"
+    exit 1
+fi
+echo "✅ 已发布到 PyPI。"
 
 echo "按 Enter 键继续发布到 [LaiYe 源]..."
 read -r
 
-# 再发布到 laiye 源
-$TWINE upload -r laiye dist/*
-echo "已发布到 [LaiYe 源]。"
+# 从 .pypirc 读取 LaiYe 凭证
+LAIYE_USERNAME=$(get_pypirc_value "laiye" "username")
+LAIYE_PASSWORD=$(get_pypirc_value "laiye" "password")
+LAIYE_URL=$(get_pypirc_value "laiye" "repository")
+
+uv publish --publish-url "$LAIYE_URL" --username "$LAIYE_USERNAME" --password "$LAIYE_PASSWORD"
+if [ $? -ne 0 ]; then
+    echo "❌ 发布到 LaiYe 失败。"
+    read -r -p "按 Enter 键退出"
+    exit 1
+fi
+echo "✅ 已发布到 [LaiYe 源]。"
 read -r -p "按 Enter 键退出"
