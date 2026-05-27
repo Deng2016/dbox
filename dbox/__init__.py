@@ -1,6 +1,8 @@
 import logging
 
-__version__ = "2026.5.27.2"
+__version__ = "{{VERSION}}"
 __commit_id__ = "{{COMMIT_ID}}"
 
-logging.getLogger(__name__).addHandler(logging.NullHandler())
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
+logger.info("version=%s commit_id=%s", __version__, __commit_id__)

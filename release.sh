@@ -20,12 +20,25 @@ if [ -n "$(git status --porcelain)" ]; then
     exit 1
 fi
 
-# 获取 git commit short ID
+# 生成版本号（四段式：年.月.日.HHMM，取最后一次 commit 的时间）
+generate_version() {
+    local year=$(git log -1 --format=%cd --date=format:%Y)
+    local month=$(git log -1 --format=%cd --date=format:%m | sed 's/^0//')
+    local day=$(git log -1 --format=%cd --date=format:%d | sed 's/^0//')
+    local hm=$((10#$(git log -1 --format=%cd --date=format:%H%M)))
+    echo "${year}.${month}.${day}.${hm}"
+}
+
+version=$(generate_version)
 commit_id=$(git rev-parse --short HEAD)
+echo "版本号: $version"
 echo "当前 commit ID: $commit_id"
 
-# 替换 dbox/__init__.py 中的 __commit_id__ 占位符
-sed -i "s/__commit_id__ = \".*\"/__commit_id__ = \"$commit_id\"/" dbox/__init__.py
+# 替换 dbox/__init__.py 中的占位符
+sed -i \
+    -e "s/__version__ = \"{{VERSION}}\"/__version__ = \"$version\"/" \
+    -e "s/__commit_id__ = \"{{COMMIT_ID}}\"/__commit_id__ = \"$commit_id\"/" \
+    dbox/__init__.py
 
 # 统一使用项目根目录下的 .venv 虚拟环境
 PROJECT_VENV=".venv"
