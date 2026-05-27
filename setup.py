@@ -26,12 +26,12 @@ setup(
     },
     python_requires=">=3.12",
     install_requires=[
-        "requests~=2.32.5",
+        "requests~=2.33.0",
         "redis~=7.3.0",
         "pycryptodome~=3.23.0",
         "xpinyin~=0.7.7",
         "pysmb~=1.2.13",
-        "pyjwt~=2.11.0",
+        "pyjwt~=2.12.0",
         "pytz~=2026.1.post1",
     ],
     classifiers=[
